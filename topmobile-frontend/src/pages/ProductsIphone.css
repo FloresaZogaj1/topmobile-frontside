@@ -1,0 +1,116 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #f5f5f3;
+  }
+  
+  /* Filtrat */
+  .products-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .products-filters input,
+  .products-filters select {
+    padding: 8px 12px;
+    border-radius: 7px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    min-width: 150px;
+    background: #fff;
+    outline: none;
+    transition: border 0.15s;
+  }
+  .products-filters input:focus,
+  .products-filters select:focus {
+    border: 1.5px solid #ff8000;
+  }
+  
+  /* Vetëm për MOBILE */
+  @media (max-width: 700px) {
+    /* Wrapper-in bjeri të mbulojë gjithë gjerësinë */
+    .MuiBox-root,
+    .products-container,
+    .home-container {
+      max-width: 100vw !important;
+      width: 100vw !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+  
+    /* Filtrat një mbi një */
+    .products-filters {
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+    }
+    .products-filters input,
+    .products-filters select {
+      min-width: 100%;
+      width: 100%;
+      font-size: 15px;
+    }
+  
+    /* Kartat të mbushin plot gjerësinë */
+    .MuiGrid-root {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+  }
+  @media (max-width: 700px) {
+    /* Wrapper të mbulojë gjithë gjerësinë e ekranit */
+    .MuiBox-root,
+    .products-container,
+    .home-container {
+      max-width: 100vw !important;
+      width: 100vw !important;
+      margin: 0 !important;
+      padding: 0 4vw !important;   /* pak padding anash, që inputet të mos dalin jashtë */
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+    .products-filters {
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0;
+    }
+    .products-filters input,
+    .products-filters select {
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 15px;
+      margin: 0;
+    }
+  
+    /* Grid – kartat të jenë plot gjerësinë */
+    .MuiGrid-root {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    /* Për kartat, bëji më kompakte për mobile */
+    .MuiCard-root {
+      min-width: 0 !important;
+      min-height: 240px !important;
+      padding: 0 !important;
+    }
+    /* Shto në Shportë: bëje më të vogël dhe më të shtrirë */
+    .MuiButton-root {
+      font-size: 14px !important;
+      padding-top: 9px !important;
+      padding-bottom: 9px !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      min-width: 100px !important;
+      width: 100%;
+      border-radius: 8px !important;
+    }
+  }
+  

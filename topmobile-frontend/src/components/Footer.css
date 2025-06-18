@@ -1,0 +1,113 @@
+.footer {
+  background: #fff;
+  border-top: 1.5px solid #f2f2f2;
+  margin-top: 45px;
+  color: #515776;
+  font-family: inherit;
+}
+.footer-main {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 38px 24px 22px 24px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.footer-logo-contact {
+  flex: 1.5;
+  min-width: 260px;
+}
+.footer-logo {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ff8000;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+.footer-contact div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 7px;
+  gap: 7px;
+  font-size: 15px;
+  color: #22223b;
+}
+.footer-links {
+  flex: 1;
+  min-width: 170px;
+  margin-bottom: 24px;
+}
+.footer-links h4 { font-size: 1.08rem; margin-bottom: 12px; }
+.footer-links ul { padding: 0; list-style: none; }
+.footer-links li { margin-bottom: 6px; }
+.footer-links a { color: #50577A; text-decoration: none; font-size: 15px; }
+.footer-links a:hover { color: #ff8000; }
+.footer-subscribe {
+  flex: 1.5;
+  min-width: 260px;
+}
+.footer-subscribe h4 { font-size: 1.08rem; margin-bottom: 12px; }
+.subscribe-form {
+  display: flex;
+  background: #f7f8fa;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 320px;
+}
+.subscribe-form input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 12px 13px;
+  font-size: 15.5px;
+  background: transparent;
+  color: #222;
+}
+.subscribe-form button {
+  background: #216bf5;
+  color: #fff;
+  border: none;
+  width: 46px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+.subscribe-form button:hover { background: #003ba6; }
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  border-top: 1px solid #f1f2f3;
+  padding: 18px 22px 12px 22px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  font-size: 14.5px;
+}
+.footer-payments {
+  display: flex;
+  align-items: center;
+  min-width: 90px;
+}
+.footer-bottom-links {
+  display: flex;
+  gap: 24px;
+  flex: 1;
+  justify-content: center;
+}
+.footer-bottom-links a {
+  color: #7d8299;
+  text-decoration: none;
+  font-size: 14px;
+}
+.footer-bottom-links a:hover { color: #ff8000; }
+.footer-copyright {
+  color: #9c9cb4;
+  font-size: 13.8px;
+}
+@media (max-width: 900px) {
+  .footer-main { flex-direction: column; gap: 18px; padding: 28px 8px 14px 8px; }
+  .footer-bottom { flex-direction: column; gap: 10px; align-items: flex-start; }
+}
