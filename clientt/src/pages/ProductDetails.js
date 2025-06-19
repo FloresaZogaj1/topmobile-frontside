@@ -1,116 +1,123 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import ProductReviews from "../components/ProductReviews"; // Importo komponentin e review-ve
+import { Box, Typography, Button, Tab, Tabs, Paper } from "@mui/material";
+import demoProducts from "../data/products";
+import iphoneProducts from "../data/productsiphone";
+import samsungProducts from "../data/samsungproducts";
+import accessoriesproducts from "../data/accesoriesproducts";
+// importo edhe array të tjera nëse ke (p.sh. Samsung, aksesorë, giftcard...)
 
-const ProductDetails = ({ addToCart }) => {
+const allProducts = [
+  ...demoProducts,
+  ...iphoneProducts,
+  ...samsungProducts,
+  ...accessoriesproducts,
+];
+
+const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState(null);
-  const [reviews, setReviews] = useState([]);
+  const product = allProducts.find(p => p.id === id);
 
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/products/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        setProduct(data);
-        // Nëse produkti ka review nga backend, i merr ato. Nëse jo, shfaq default.
-        setReviews(
-          Array.isArray(data.reviews) && data.reviews.length > 0
-            ? data.reviews
-            : [
-                {
-                  name: "Ardian",
-                  stars: 5,
-                  comment: "Shumë i kënaqur me produktin, shërbim i shpejtë!",
-                  date: "03.06.2025"
-                },
-                {
-                  name: "Sara",
-                  stars: 4,
-                  comment: "Telefoni ishte origjinal, por vonoi pak dërgesa.",
-                  date: "01.06.2025"
-                }
-              ]
-        );
-      });
-  }, [id]);
+  const [tab, setTab] = useState(0);
+  const [imgIdx, setImgIdx] = useState(0);
 
-  // Kur shtohet review i ri nga useri
-  const handleAddReview = (review) => {
-    setReviews(prev => [review, ...prev]);
-    // Shtesë: Mund të bësh edhe POST te backend këtu nëse do të ruash në DB
-  };
-
-  if (!product) return <div style={{ textAlign: "center", marginTop: 80 }}>Duke u ngarkuar...</div>;
+  if (!product) return <div>Produkti nuk u gjet.</div>;
 
   return (
-    <div
-      style={{
-        maxWidth: 700,
-        margin: "60px auto",
-        background: "#fff",
-        borderRadius: 16,
-        boxShadow: "0 4px 32px #0001",
-        padding: 42,
-        textAlign: "center",
-        position: "relative",
-      }}
-    >
-      <img
-        src={`https://via.placeholder.com/170x170?text=${encodeURIComponent(product.name)}`}
-        alt={product.name}
-        style={{
-          width: 170,
-          height: 170,
-          objectFit: "cover",
-          borderRadius: 14,
-          marginBottom: 26,
-          border: "1px solid #eee",
-          boxShadow: "0 2px 12px #0001",
-        }}
-      />
-      <h2 style={{ fontWeight: 700, marginBottom: 12 }}>{product.name}</h2>
-      <div style={{ color: "#555", marginBottom: 18 }}>{product.description}</div>
-      <div style={{ fontWeight: 600, fontSize: 21, color: "#21706c", marginBottom: 28 }}>
-        Çmimi: {Number(product.price).toLocaleString()} €
-      </div>
-      <button
-        style={{
-          background: "#21706c",
-          color: "#fff",
-          border: "none",
-          padding: "13px 34px",
-          borderRadius: 8,
-          fontWeight: 600,
-          fontSize: 17,
-          letterSpacing: 1,
-          cursor: "pointer",
-          transition: "background 0.2s",
-          boxShadow: "0 2px 8px #21706c22",
-        }}
-        onClick={() => addToCart(product)}
-      >
-        Shto në Shportë
-      </button>
-      <br />
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          background: "none",
-          border: "none",
-          color: "#21706c",
-          fontWeight: "bold",
-          cursor: "pointer",
-          marginTop: 22,
-          textDecoration: "underline",
-        }}
-      >
+    <Box sx={{ maxWidth: 900, mx: "auto", py: 4 }}>
+      {/* Kthehu mbrapa */}
+      <Button onClick={() => navigate(-1)} sx={{ mb: 3, color: "#ff8000" }}>
         &larr; Kthehu te produktet
-      </button>
+      </Button>
 
-      {/* Komponenti i Review-ve */}
-      <ProductReviews reviews={reviews} onAddReview={handleAddReview} />
-    </div>
+      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 4 }}>
+        {/* Galeri Foto */}
+        <Box sx={{ flex: 1 }}>
+          <Box
+            component="img"
+            src={product.images[imgIdx]}
+            alt={product.name}
+            sx={{
+              width: "100%",
+              maxWidth: 350,
+              height: 320,
+              objectFit: "contain",
+              borderRadius: 2,
+              mb: 2,
+              boxShadow: "0 2px 24px #0001"
+            }}
+          />
+          {/* Thumbnails */}
+          <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
+            {product.images.map((img, idx) => (
+              <Box
+                key={idx}
+                component="img"
+                src={img}
+                alt={product.name + " " + (idx + 1)}
+                sx={{
+                  width: 64,
+                  height: 48,
+                  objectFit: "contain",
+                  borderRadius: 1,
+                  border: imgIdx === idx ? "2px solid #ff8000" : "1px solid #eee",
+                  cursor: "pointer"
+                }}
+                onClick={() => setImgIdx(idx)}
+              />
+            ))}
+          </Box>
+        </Box>
+
+        {/* Info */}
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="h4" sx={{ mb: 2 }}>{product.name}</Typography>
+          <Typography color="warning.main" sx={{ fontSize: 25, fontWeight: 700 }}>
+            €{product.price}
+          </Typography>
+          {product.oldPrice && (
+            <Typography sx={{ textDecoration: "line-through", color: "#bbb", mb: 1 }}>
+              €{product.oldPrice}
+            </Typography>
+          )}
+
+          {/* Shto ne shporte */}
+          <Button
+            variant="contained"
+            color="warning"
+            size="large"
+            sx={{ my: 2 }}
+            // onClick={() => ... shto ne cart}
+          >
+            Shto në Shportë 🛒
+          </Button>
+
+          {/* Tabs për Përshkrim & Specifikime */}
+          <Paper sx={{ mt: 3 }}>
+            <Tabs value={tab} onChange={(_, v) => setTab(v)}>
+              <Tab label="Përshkrimi" />
+              <Tab label="Specifikime" />
+            </Tabs>
+            <Box sx={{ p: 2 }}>
+              {tab === 0 && <Typography>{product.description}</Typography>}
+              {tab === 1 && (
+                <Box component="ul" sx={{ pl: 3 }}>
+                  {Object.entries(product.specs).map(([key, val]) => (
+                    <li key={key}>
+                      <strong>{key}:</strong> {val}
+                    </li>
+                  ))}
+                  {Object.keys(product.specs).length === 0 && (
+                    <Typography color="#888">Ky produkt nuk ka specifika të detajuara.</Typography>
+                  )}
+                </Box>
+              )}
+            </Box>
+          </Paper>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

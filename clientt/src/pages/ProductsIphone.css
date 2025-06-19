@@ -113,4 +113,39 @@ body {
       border-radius: 8px !important;
     }
   }
+  .product-card {
+    position: relative;
+    overflow: visible;
+  }
+  .image-zone {
+    position: relative;
+    overflow: hidden;
+  }
+  .product-hover-btn {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 54%;
+    transform: translate(-50%, -50%);
+    background: #ff8000;
+    color: #fff;
+    padding: 8px 24px;
+    border-radius: 9px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    box-shadow: 0 4px 18px #ff800044;
+    transition: background 0.14s;
+    z-index: 2;
+    pointer-events: auto;
+  }
+  .image-zone:hover .product-hover-btn,
+  .product-card:hover .product-hover-btn {
+    display: block;
+    animation: fadein .18s;
+  }
+  @keyframes fadein {
+    from { opacity: 0;}
+    to { opacity: 1;}
+  }
   

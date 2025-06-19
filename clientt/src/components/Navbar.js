@@ -1,24 +1,32 @@
 import React from "react";
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import MenuIcon from '@mui/icons-material/Menu';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import SearchIcon from '@mui/icons-material/Search';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Typography from "@mui/material/Typography";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import MenuIcon from "@mui/icons-material/Menu";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
+import HomeIcon from "@mui/icons-material/Home";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
 import logo from "../assets/PFP-01__5_-removebg-preview.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../CartContext";
@@ -59,69 +67,81 @@ const Navbar = ({ loggedIn, handleLogout }) => {
   };
 
   const drawer = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={() => setMobileOpen(false)}>
+    <Box sx={{ width: 280 }} role="presentation">
+      {/* Header with logo + close */}
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2 }}>
+        <Link to="/">
+          <img src={logo} alt="Top Mobile" style={{ height: 50 }} />
+        </Link>
+        <IconButton onClick={() => setMobileOpen(false)}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+
+      <Divider />
+
       <List>
+        {/* Home */}
         <ListItem disablePadding>
-          <ListItemButton component={Link} to="/">
-            <ListItemText primary="Ballina" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="Produktet" />
-        </ListItem>
-        <ListItem sx={{ pl: 3 }} disablePadding>
-          <ListItemButton component={Link} to="/products/iphone">
-            <ListItemText primary="iPhone" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem sx={{ pl: 3 }} disablePadding>
-          <ListItemButton component={Link} to="/products/samsung">
-            <ListItemText primary="Samsung" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem sx={{ pl: 3 }} disablePadding>
-          <ListItemButton component={Link} to="/products/giftcard">
-            <ListItemText primary="Gift Card" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem sx={{ pl: 3 }} disablePadding>
-          <ListItemButton component={Link} to="/products/accessories">
-            <ListItemText primary="Aksesorë" />
+          <ListItemButton component={Link} to="/" onClick={() => setMobileOpen(false)}>
+            <ListItemIcon>
+              <HomeIcon sx={{ color: "#ff8000" }} />
+            </ListItemIcon>
+            <ListItemText primary="Ballina" primaryTypographyProps={{ fontWeight: 600 }} />
           </ListItemButton>
         </ListItem>
 
-        <ListItem>
-          <ListItemText primary="Shërbimet" />
-        </ListItem>
-        <ListItem sx={{ pl: 3 }} disablePadding>
-          <ListItemButton component={Link} to="/sherbimet/mirembajtja">
-            <ListItemText primary="Mirëmbajtja me Kontratë" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem sx={{ pl: 3 }} disablePadding>
-          <ListItemButton component={Link} to="/sherbimet/telefona">
-            <ListItemText primary="Pjesë për Telefona" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem sx={{ pl: 3 }} disablePadding>
-          <ListItemButton component={Link} to="/sherbimet/playstation">
-            <ListItemText primary="Pjesë për PlayStation" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem sx={{ pl: 3 }} disablePadding>
-          <ListItemButton component={Link} to="/sherbimet/servisi">
-            <ListItemText primary="Servisi dhe Përkrahja" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem sx={{ pl: 3 }} disablePadding>
-          <ListItemButton component={Link} to="/sherbimet/asistenca">
-            <ListItemText primary="Asistencë e Përgjithshme Mobile" />
-          </ListItemButton>
-        </ListItem>
+        {/* Products Accordion */}
+        <Accordion sx={{ boxShadow: "none" }}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#ff8000" }} />} sx={{ px: 2 }}>
+            <Typography sx={{ fontWeight: 600, color: "#ff8000" }}>Produktet</Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ p: 0 }}>
+            {["iphone", "samsung", "giftcard", "accessories"].map((cat) => (
+              <ListItemButton
+                key={cat}
+                component={Link}
+                to={`/products/${cat}`}
+                sx={{ pl: 4 }}
+                onClick={() => setMobileOpen(false)}
+              >
+                <ListItemText primary={cat.charAt(0).toUpperCase() + cat.slice(1)} />
+              </ListItemButton>
+            ))}
+          </AccordionDetails>
+        </Accordion>
+
+        {/* Services Accordion */}
+        <Accordion sx={{ boxShadow: "none" }}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#ff8000" }} />} sx={{ px: 2 }}>
+            <Typography sx={{ fontWeight: 600, color: "#ff8000" }}>Shërbimet</Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ p: 0 }}>
+            {[
+              { path: "mirembajtja", label: "Mirëmbajtja me Kontratë" },
+              { path: "telefona", label: "Pjesë për Telefona" },
+              { path: "playstation", label: "Pjesë për PlayStation" },
+              { path: "servisi", label: "Servisi & Përkrahja" },
+              { path: "asistenca", label: "Asistencë Mobile" },
+            ].map((srv) => (
+              <ListItemButton
+                key={srv.path}
+                component={Link}
+                to={`/sherbimet/${srv.path}`}
+                sx={{ pl: 4 }}
+                onClick={() => setMobileOpen(false)}
+              >
+                <ListItemText primary={srv.label} />
+              </ListItemButton>
+            ))}
+          </AccordionDetails>
+        </Accordion>
 
         <Divider sx={{ my: 1 }} />
+
+        {/* Terms & Help */}
         <ListItem disablePadding>
-          <ListItemButton component={Link} to="/terms">
+          <ListItemButton component={Link} to="/terms" onClick={() => setMobileOpen(false)}>
             <ListItemText primary="Kushtet & Kujdesi ndaj Klientit" />
           </ListItemButton>
         </ListItem>
@@ -134,11 +154,21 @@ const Navbar = ({ loggedIn, handleLogout }) => {
       <Container maxWidth="lg">
         <Toolbar disableGutters sx={{ justifyContent: "space-between", minHeight: 82 }}>
           <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center", mr: 1 }}>
-            <IconButton size="large" edge="start" onClick={() => setMobileOpen(true)} sx={{ color: "#ff8000" }}>
+            <IconButton
+              size="large"
+              edge="start"
+              onClick={() => setMobileOpen(true)}
+              sx={{ color: "#ff8000" }}
+            >
               <MenuIcon />
             </IconButton>
           </Box>
-          <Drawer anchor="left" open={mobileOpen} onClose={() => setMobileOpen(false)} ModalProps={{ keepMounted: true }}>
+          <Drawer
+            anchor="left"
+            open={mobileOpen}
+            onClose={() => setMobileOpen(false)}
+            ModalProps={{ keepMounted: true }}
+          >
             {drawer}
           </Drawer>
 
@@ -153,32 +183,59 @@ const Navbar = ({ loggedIn, handleLogout }) => {
               Ballina
             </Button>
 
-            <Button sx={{ color: "#ff8000", fontWeight: 600 }} onClick={handleOpenProductsMenu} endIcon={<ArrowDropDownIcon />}>
+            <Button
+              sx={{ color: "#ff8000", fontWeight: 600 }}
+              onClick={handleOpenProductsMenu}
+              endIcon={<ArrowDropDownIcon />}
+            >
               Produktet
             </Button>
-            <Menu anchorEl={anchorElProducts} open={Boolean(anchorElProducts)} onClose={handleCloseProductsMenu}>
-              <MenuItem component={Link} to="/products/iphone" onClick={handleCloseProductsMenu}>iPhone</MenuItem>
-              <MenuItem component={Link} to="/products/samsung" onClick={handleCloseProductsMenu}>Samsung</MenuItem>
-              <MenuItem component={Link} to="/products/giftcard" onClick={handleCloseProductsMenu}>Gift Card</MenuItem>
-              <MenuItem component={Link} to="/products/accessories" onClick={handleCloseProductsMenu}>Aksesorë</MenuItem>
+            <Menu
+              anchorEl={anchorElProducts}
+              open={Boolean(anchorElProducts)}
+              onClose={handleCloseProductsMenu}
+            >
+              <MenuItem component={Link} to="/products/iphone" onClick={handleCloseProductsMenu}>
+                iPhone
+              </MenuItem>
+              <MenuItem component={Link} to="/products/samsung" onClick={handleCloseProductsMenu}>
+                Samsung
+              </MenuItem>
+              <MenuItem component={Link} to="/products/giftcard" onClick={handleCloseProductsMenu}>
+                Gift Card
+              </MenuItem>
+              <MenuItem component={Link} to="/products/accessories" onClick={handleCloseProductsMenu}>
+                Aksesorë
+              </MenuItem>
             </Menu>
 
             <Button
-  sx={{ color: "#ff8000", fontWeight: 600 }}
-  endIcon={<ArrowDropDownIcon />}
-  component={Link}
-  to="/sherbimet"
-  onClick={handleOpenServicesMenu} // Ky e hap dropdown-in në vend që të shkojë te faqja
->
-  Shërbimet
-</Button>
-
-            <Menu anchorEl={anchorElServices} open={Boolean(anchorElServices)} onClose={handleCloseServicesMenu}>
-              <MenuItem component={Link} to="/sherbimet/mirembajtja" onClick={handleCloseServicesMenu}>Mirëmbajtja me Kontratë</MenuItem>
-              <MenuItem component={Link} to="/sherbimet/telefona" onClick={handleCloseServicesMenu}>Pjesë për Telefona</MenuItem>
-              <MenuItem component={Link} to="/sherbimet/playstation" onClick={handleCloseServicesMenu}>Pjesë për PlayStation</MenuItem>
-              <MenuItem component={Link} to="/sherbimet/servisi" onClick={handleCloseServicesMenu}>Servisi dhe Përkrahja</MenuItem>
-              <MenuItem component={Link} to="/sherbimet/asistenca" onClick={handleCloseServicesMenu}>Asistencë e Përgjithshme Mobile</MenuItem>
+              sx={{ color: "#ff8000", fontWeight: 600 }}
+              endIcon={<ArrowDropDownIcon />}
+              onClick={handleOpenServicesMenu}
+            >
+              Shërbimet
+            </Button>
+            <Menu
+              anchorEl={anchorElServices}
+              open={Boolean(anchorElServices)}
+              onClose={handleCloseServicesMenu}
+            >
+              <MenuItem component={Link} to="/sherbimet/mirembajtja" onClick={handleCloseServicesMenu}>
+                Mirëmbajtja me Kontratë
+              </MenuItem>
+              <MenuItem component={Link} to="/sherbimet/telefona" onClick={handleCloseServicesMenu}>
+                Pjesë për Telefona
+              </MenuItem>
+              <MenuItem component={Link} to="/sherbimet/playstation" onClick={handleCloseServicesMenu}>
+                Pjesë për PlayStation
+              </MenuItem>
+              <MenuItem component={Link} to="/sherbimet/servisi" onClick={handleCloseServicesMenu}>
+                Servisi & Përkrahja
+              </MenuItem>
+              <MenuItem component={Link} to="/sherbimet/asistenca" onClick={handleCloseServicesMenu}>
+                Asistencë Mobile
+              </MenuItem>
             </Menu>
 
             <Button component={Link} to="/blog" sx={{ color: "#ff8000", fontWeight: 600 }}>
@@ -186,7 +243,14 @@ const Navbar = ({ loggedIn, handleLogout }) => {
             </Button>
           </Box>
 
-          <Box sx={{ flexGrow: 1, maxWidth: 370, mx: { xs: 0, md: 2 }, display: { xs: "none", sm: "flex" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              maxWidth: 370,
+              mx: { xs: 0, md: 2 },
+              display: { xs: "none", sm: "flex" },
+            }}
+          >
             <TextField
               fullWidth
               variant="outlined"
@@ -200,16 +264,16 @@ const Navbar = ({ loggedIn, handleLogout }) => {
                 borderRadius: 2,
                 boxShadow: 1,
                 minWidth: 120,
-                '& .MuiOutlinedInput-root': {
+                "& .MuiOutlinedInput-root": {
                   paddingRight: 0,
-                }
+                },
               }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <SearchIcon sx={{ color: "#aaa", cursor: "pointer" }} onClick={handleSearch} />
                   </InputAdornment>
-                )
+                ),
               }}
             />
           </Box>
@@ -234,23 +298,25 @@ const Navbar = ({ loggedIn, handleLogout }) => {
               <IconButton sx={{ color: "#ff8000", position: "relative" }}>
                 <ShoppingCartIcon />
                 {cart?.length > 0 && (
-                  <span style={{
-                    position: 'absolute',
-                    top: 2,
-                    right: 2,
-                    background: 'red',
-                    color: 'white',
-                    borderRadius: '50%',
-                    fontSize: 10,
-                    padding: '2px 5px',
-                  }}>
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: 2,
+                      right: 2,
+                      background: "red",
+                      color: "white",
+                      borderRadius: "50%",
+                      fontSize: 10,
+                      padding: "2px 5px",
+                    }}
+                  >
                     {cart.length}
                   </span>
                 )}
               </IconButton>
             </Link>
 
-            {(loggedIn && role === "admin") && (
+            {loggedIn && role === "admin" && (
               <Button onClick={onLogout} sx={{ color: "#ff8000", fontWeight: 600 }}>
                 Dil
               </Button>
