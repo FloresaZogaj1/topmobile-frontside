@@ -6,12 +6,6 @@ const demoProducts = [
   // ... vendos produktet tuaja këtu si fallback nëse s’ka asgjë nga API
 ];
 
-const categories = [
-  { value: "all", label: "Të gjitha" },
-  { value: "phone", label: "Telefona" },
-  { value: "case", label: "Case" },
-  { value: "giftcard", label: "Gift Card" }
-];
 
 function ProductCard({ product, addToCart }) {
   return (

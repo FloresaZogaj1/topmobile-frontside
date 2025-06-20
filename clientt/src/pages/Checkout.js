@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PayPalButton from "../components/PayPalButton";
 import { useCart } from "../CartContext";
 
 const Checkout = () => {
@@ -14,10 +13,7 @@ const Checkout = () => {
 
   const total = cart.reduce((sum, p) => sum + (p.price * p.qty), 0);
 
-  const handlePayPalSuccess = (order) => {
-    setSubmitted(true);
-    clearCart();
-  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
