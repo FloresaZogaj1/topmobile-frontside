@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -7,7 +8,7 @@ const ProductsList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/products")
+      .get(`${process.env.REACT_APP_API_URL}/api/products`)
       .then((res) => {
         setProducts(res.data);
         setLoading(false);
