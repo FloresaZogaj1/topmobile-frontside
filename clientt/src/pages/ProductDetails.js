@@ -5,7 +5,7 @@ import demoProducts from "../data/products";
 import iphoneProducts from "../data/productsiphone";
 import samsungProducts from "../data/samsungproducts";
 import accessoriesproducts from "../data/accesoriesproducts";
-// importo edhe array të tjera nëse ke (p.sh. Samsung, aksesorë, giftcard...)
+import { useCart } from "../CartContext"; // <- Importo CartContext
 
 const allProducts = [
   ...demoProducts,
@@ -17,6 +17,8 @@ const allProducts = [
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart } = useCart(); // <- Merr funksionin e shtimit në cart
+
   const product = allProducts.find(p => p.id === id);
 
   const [tab, setTab] = useState(0);
@@ -88,7 +90,7 @@ const ProductDetails = () => {
             color="warning"
             size="large"
             sx={{ my: 2 }}
-            // onClick={() => ... shto ne cart}
+            onClick={() => addToCart(product)} // <- Kjo është ajo që të mungonte!
           >
             Shto në Shportë 🛒
           </Button>

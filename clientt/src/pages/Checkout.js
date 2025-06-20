@@ -135,10 +135,7 @@ const Checkout = () => {
         </button>
       </form>
 
-      <div style={{ textAlign: "center", margin: "16px 0 0 0" }}>
-        <div style={{ marginBottom: 10, fontWeight: 600, color: "#888" }}>Ose paguaj direkt me PayPal</div>
-        <PayPalButton total={total} onSuccess={handlePayPalSuccess} />
-      </div>
+      
     </div>
   );
 };
