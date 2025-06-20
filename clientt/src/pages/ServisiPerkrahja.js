@@ -1,5 +1,7 @@
 import React from 'react';
 import { Box, Container, Typography, Grid, Card, CardContent} from '@mui/material';
+import { CardMedia } from "@mui/material";
+
 
 const serviceParts = [
   {
