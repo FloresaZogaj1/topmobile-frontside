@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../CartContext";
 const API_URL = process.env.REACT_APP_API_URL || "https://topmobile-backside-production.up.railway.app";
 
-
 const Checkout = () => {
   const { cart, clearCart } = useCart();
   const [name, setName] = useState("");
@@ -15,25 +14,29 @@ const Checkout = () => {
 
   const total = cart.reduce((sum, p) => sum + (p.price * p.qty), 0);
 
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    // KJO ËSHTË SHUMË E RËNDËSISHME PËR DEBUG!
+    const order = {
+      customerName: name,
+      phone,
+      address,
+      items: cart,
+      total
+    };
+    console.log("Porosia që dërgohet te backend:", order);
+
     try {
-      const order = {
-        customerName: name,
-        phone,
-        address,
-        items: cart,
-        total
-      };
+      console.log("ORDER PER TE DERGUAR:", order);
+
       const res = await fetch(`${API_URL}/api/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order)
       });
-      
+
       if (res.ok) {
         setSubmitted(true);
         clearCart();
@@ -133,8 +136,6 @@ const Checkout = () => {
           {loading ? "Duke dërguar..." : "Dërgo Porosinë"}
         </button>
       </form>
-
-      
     </div>
   );
 };
