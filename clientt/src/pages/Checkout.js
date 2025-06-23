@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../CartContext";
+const API_URL = process.env.REACT_APP_API_URL || "https://topmobile-backside-production.up.railway.app";
+
 
 const Checkout = () => {
   const { cart, clearCart } = useCart();
@@ -26,11 +28,12 @@ const Checkout = () => {
         items: cart,
         total
       };
-      const res = await fetch("http://localhost:5000/api/orders", {
+      const res = await fetch(`${API_URL}/api/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order)
       });
+      
       if (res.ok) {
         setSubmitted(true);
         clearCart();

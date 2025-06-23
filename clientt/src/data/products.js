@@ -13,10 +13,7 @@ const demoProducts = [
       category: "phone",
       price: 1099,
       oldPrice: 1199,
-      images: [
-        foto1,
-        "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-14-pro-max-2.jpg"
-      ],
+      images: [foto1],
       specs: {
         "Kamera": "48MP + 12MP + 12MP",
         "Memoria": "256GB",
@@ -32,10 +29,10 @@ const demoProducts = [
       category: "phone",
       price: 1150,
       oldPrice: 1270,
-      images: [
-        fotto2,
-        "https://images.samsung.com/is/image/samsung/p6pim/al/2401/gallery/al-galaxy-s24-ultra-sm-s928bzgamea-thumb-539009299?$684_547_PNG$"
-      ],
+      images: [fotto2],
+        
+        
+    
       specs: {
         "Ekrani": "6.8” QHD+ AMOLED",
         "Kamera": "200MP + 12MP + 10MP + 10MP",

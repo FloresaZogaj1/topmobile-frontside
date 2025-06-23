@@ -6,10 +6,12 @@ const ProductsLists = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
+  const API_URL = process.env.REACT_APP_API_URL || "https://topmobile-backside-production.up.railway.app";
+
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/products")
+      .get(`${API_URL}/api/products`)
       .then((res) => {
         setProducts(res.data);
         setLoading(false);
@@ -19,7 +21,7 @@ const ProductsLists = () => {
         setLoading(false);
       });
   }, []);
-
+  
   if (loading) return <p>Po ngarkohen produktet...</p>;
 
   return (

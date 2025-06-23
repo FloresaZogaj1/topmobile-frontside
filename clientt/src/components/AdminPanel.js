@@ -6,6 +6,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
+const API_URL = process.env.REACT_APP_API_URL || "https://topmobile-backside-production.up.railway.app";
+
 const AdminPanel = () => {
   const [products, setProducts] = useState([]);
   const [form, setForm] = useState({ name: "", price: "", description: "", category: "", image: "" });
@@ -16,7 +18,7 @@ const AdminPanel = () => {
 
   // Merr produktet
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/products`)
+    fetch(`${API_URL}/api/products`)
       .then(res => res.json())
       .then(data => setProducts(data));
   }, []);
@@ -41,7 +43,7 @@ const AdminPanel = () => {
       let resp;
       if (editingId) {
         // Edit
-        resp = await fetch(`http://localhost:5000/api/products/${editingId}`, {
+        resp = await fetch(`${API_URL}/api/products/${editingId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -51,7 +53,7 @@ const AdminPanel = () => {
         });
       } else {
         // Shto
-        resp = await fetch("http://localhost:5000/api/products", {
+        resp = await fetch(`${API_URL}/api/products`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -69,7 +71,7 @@ const AdminPanel = () => {
         setForm({ name: "", price: "", description: "", category: "", image: "" });
         setEditingId(null);
         // Rifresko listen e produkteve
-        fetch(`${process.env.REACT_APP_API_URL}/api/products`)
+        fetch(`${API_URL}/api/products`)
           .then(res => res.json())
           .then(data => setProducts(data));
       } else {
@@ -88,7 +90,7 @@ const AdminPanel = () => {
 
   const handleDelete = async id => {
     if (window.confirm("A je i sigurt?")) {
-      const resp = await fetch(`http://localhost:5000/api/products/${id}`, {
+      const resp = await fetch(`${API_URL}/api/products/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -188,7 +190,6 @@ const AdminPanel = () => {
           >
             {editingId ? "Ruaj Ndryshimet" : "Shto Produkt"}
           </Button>
-          
           )}
         </form>
       </Paper>
