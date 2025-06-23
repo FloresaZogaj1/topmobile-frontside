@@ -35,7 +35,7 @@ const AdminOrders = () => {
   }, []);
 
   // Ndrysho statusin
-  const handleStatusChange = async (id, newStatus) => {
+  const handleStatusChange = async (id, newStatus) => {    
     setChangingId(id);
     await fetch(`http://localhost:5000/api/orders/${id}`, {
       method: "PATCH",
