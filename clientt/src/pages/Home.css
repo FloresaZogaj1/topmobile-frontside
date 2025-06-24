@@ -91,13 +91,37 @@
 
 @media (max-width: 700px) {
   .products-list {
-    grid-template-columns: 1fr; /* 1 në mobile */
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
-  .product-card { min-height: 150px; padding: 8px 3px 7px 3px; }
-  .product-card img { max-width: 80px; max-height: 55px; }
-  .product-info h3 { font-size: 13px; min-height: 14px; }
+  .product-card {
+    min-height: 200px;
+    padding: 14px 6px 16px 6px;
+  }
+  .image-zone {
+    height: 190px;       /* edhe më lartë */
+    min-height: 150px;
+    max-height: 220px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-card img {
+    max-width: 200px;    /* edhe më shumë */
+    max-height: 155px;
+    min-width: 120px;
+    min-height: 80px;
+    object-fit: contain;
+    margin: 0 auto 10px auto;
+    display: block;
+  }
+  .product-info h3 {
+    font-size: 16px;
+    min-height: 22px;
+  }
 }
+
 
 /* KATEGORITE */
 .category-list {

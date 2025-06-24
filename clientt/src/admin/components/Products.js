@@ -1,27 +1,38 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box, Button, TextField, Typography, List, ListItem, IconButton, Snackbar, Alert, Paper, Divider
+  Box, Typography, Paper, Button, TextField, List, ListItem, IconButton, Divider, Snackbar, Alert, CircularProgress
 } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-const AdminPanel = () => {
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const token = localStorage.getItem("token");
+
+export default function Products() {
   const [products, setProducts] = useState([]);
   const [form, setForm] = useState({ name: "", price: "", description: "", category: "", image: "" });
   const [editingId, setEditingId] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
   const [errors, setErrors] = useState({});
-  const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(true);
 
-  // Merr produktet
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/products`)
-      .then(res => res.json())
-      .then(data => setProducts(data));
+    fetchProducts();
   }, []);
 
-  // Validim i thjeshtë inputesh
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/api/products`);
+      const data = await res.json();
+      setProducts(Array.isArray(data) ? data : []);
+    } catch {
+      setProducts([]);
+    }
+    setLoading(false);
+  };
+
   const validate = () => {
     let err = {};
     if (!form.name) err.name = "Emri kërkohet!";
@@ -30,7 +41,6 @@ const AdminPanel = () => {
     return err;
   };
 
-  // Shto ose edit produkt
   const handleSubmit = async e => {
     e.preventDefault();
     const err = validate();
@@ -40,38 +50,23 @@ const AdminPanel = () => {
     try {
       let resp;
       if (editingId) {
-        // Edit
-        resp = await fetch(`http://localhost:5000/api/products/${editingId}`, {
+        resp = await fetch(`${API_URL}/api/products/${editingId}`, {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
           body: JSON.stringify(form)
         });
       } else {
-        // Shto
-        resp = await fetch("http://localhost:5000/api/products", {
+        resp = await fetch(`${API_URL}/api/products`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
           body: JSON.stringify(form)
         });
       }
       if (resp.ok) {
-        setSnackbar({
-          open: true,
-          message: editingId ? "Produkti u përditësua!" : "Produkti u shtua me sukses!",
-          severity: "success"
-        });
+        setSnackbar({ open: true, message: editingId ? "Produkti u përditësua!" : "Produkti u shtua me sukses!", severity: "success" });
         setForm({ name: "", price: "", description: "", category: "", image: "" });
         setEditingId(null);
-        // Rifresko listen e produkteve
-        fetch(`${process.env.REACT_APP_API_URL}/api/products`)
-          .then(res => res.json())
-          .then(data => setProducts(data));
+        fetchProducts();
       } else {
         const data = await resp.json();
         setSnackbar({ open: true, message: data.error || "Gabim!", severity: "error" });
@@ -88,7 +83,7 @@ const AdminPanel = () => {
 
   const handleDelete = async id => {
     if (window.confirm("A je i sigurt?")) {
-      const resp = await fetch(`http://localhost:5000/api/products/${id}`, {
+      const resp = await fetch(`${API_URL}/api/products/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -101,20 +96,23 @@ const AdminPanel = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <Box sx={{ textAlign: "center", py: 8 }}>
+        <CircularProgress color="warning" size={60} />
+      </Box>
+    );
+  }
+
   return (
-    <Box sx={{
-      maxWidth: 720, mx: "auto", p: { xs: 1, sm: 3 }, mt: 6,
-      minHeight: "88vh"
-    }}>
-      <Typography variant="h4" mb={4} fontWeight={700} color="#ff8000" align="center" letterSpacing={1}>
-        Paneli i Administratorit – Produktet
-      </Typography>
-      <Paper
-        sx={{
-          p: 3, mb: 4, borderRadius: 5, boxShadow: "0 6px 32px #ff80001c",
-          background: "linear-gradient(120deg,#fff,#fff7ef 85%)"
-        }}
+    <Box sx={{ maxWidth: 880, mx: "auto", mt: 4, mb: 6 }}>
+      <Typography
+        variant="h4"
+        sx={{ color: "#ff8000", fontWeight: 700, mb: 4, letterSpacing: 1, textAlign: "center" }}
       >
+        Produktet
+      </Typography>
+      <Paper sx={{ p: 3, mb: 4, borderRadius: 5, background: "linear-gradient(120deg,#fff,#fff7ef 85%)", boxShadow: "0 6px 32px #ff80001c" }}>
         <form onSubmit={handleSubmit} style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "flex-end" }}>
           <TextField
             label="Emri"
@@ -137,7 +135,7 @@ const AdminPanel = () => {
             label="Përshkrimi"
             value={form.description}
             onChange={e => setForm({ ...form, description: e.target.value })}
-            sx={{ flex: 1.7, minWidth: 160, background: "#fff", borderRadius: 2 }}
+            sx={{ flex: 1.5, minWidth: 160, background: "#fff", borderRadius: 2 }}
           />
           <TextField
             label="Kategoria"
@@ -167,40 +165,19 @@ const AdminPanel = () => {
           </Button>
           {editingId && (
             <Button
-            variant="contained"
-            type="submit"
-            startIcon={editingId ? <EditIcon /> : <AddCircleOutlineIcon />}
-            sx={{
-              px: 2.5,
-              py: 1.3,
-              fontWeight: 700,
-              fontSize: 16,
-              borderRadius: 2,
-              boxShadow: "0 2px 10px #02304722",
-              letterSpacing: 1,
-              background: "#023047",
-              color: "#fff",
-              '&:hover': {
-                background: "#ff8000",
-                color: "#fff"
-              }
-            }}
-          >
-            {editingId ? "Ruaj Ndryshimet" : "Shto Produkt"}
-          </Button>
-          
+              variant="outlined"
+              color="inherit"
+              onClick={() => { setForm({ name: "", price: "", description: "", category: "", image: "" }); setEditingId(null); }}
+              sx={{ fontWeight: 700, borderRadius: 2, px: 2.5, py: 1.3, ml: -1 }}
+            >
+              Anulo
+            </Button>
           )}
         </form>
       </Paper>
-      <Paper
-        sx={{
-          p: 3, borderRadius: 5, boxShadow: "0 3px 20px #ff800012",
-          background: "#fff",
-          mb: 6
-        }}
-      >
+      <Paper sx={{ p: 3, borderRadius: 5, boxShadow: "0 3px 20px #ff800012", background: "#fff", mb: 6 }}>
         <Typography variant="h6" fontWeight={700} mb={2} color="#50577a">
-          Produktet Aktuale
+          Lista e Produkteve
         </Typography>
         <Divider sx={{ mb: 2 }} />
         <List sx={{ width: "100%" }}>
@@ -258,6 +235,4 @@ const AdminPanel = () => {
       </Snackbar>
     </Box>
   );
-};
-
-export default AdminPanel;
+}

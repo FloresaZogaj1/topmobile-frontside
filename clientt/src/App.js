@@ -17,7 +17,7 @@ import Footer from "./components/Footer";
 import BlogList from "./components/BlogList";
 import BlogPost from "./components/BlogPost";
 import ProductsLists from "./components/ProductsLists";
-import AdminPanel from "./components/AdminPanel";
+import AdminPanel from "./admin/components/AdminPanel";
 import AdminOrders from "./AdminOrders";
 import Search from "./pages/Search";
 import Kushtet from './pages/Kushtet';
@@ -29,6 +29,7 @@ import PjeseTelefona from "./pages/PjeseTelefona";
 import PjesePlaystation from "./pages/PjesePlaystation";
 import ServisiPerkrahja from "./pages/ServisiPerkrahja";
 import AsistencaMobile from "./pages/AsistencaMobile";
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -81,6 +82,7 @@ function App() {
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
+
         </Routes>
         <Footer />
       </Router>

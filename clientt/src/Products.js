@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Card, CardContent, Typography, Button, Box } from "@mui/material";
 import { useCart } from "../CartContext";
 
+
 const demoProducts = [
   // ... vendos produktet tuaja këtu si fallback nëse s’ka asgjë nga API
 ];

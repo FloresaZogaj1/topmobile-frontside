@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../CartContext";
-const API_URL = process.env.REACT_APP_API_URL || "https://topmobile-backside-production.up.railway.app";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 const Checkout = () => {
   const { cart, clearCart } = useCart();

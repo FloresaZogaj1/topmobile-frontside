@@ -11,8 +11,14 @@ import appleCard100 from "../assets/bd222544351dcf84ac89c6f8ae62b264-removebg-pr
 import playStore10 from "../assets/51mwochEL-L._UF1000_1000_QL80_DpWeblab_-removebg-preview.png";
 import playStore25 from "../assets/51mwochEL-L._UF1000_1000_QL80_DpWeblab_-removebg-preview.png";
 import playStore50 from "../assets/51mwochEL-L._UF1000_1000_QL80_DpWeblab_-removebg-preview.png";
-import giftPlaceholder from "../assets/51mwochEL-L._UF1000_1000_QL80_DpWeblab_-removebg-preview.png";
-import gfs from "../assets/freepik_br_2e5b1fb8-c95c-47e1-b93d-5f9180aa0737.png"
+import giftPlaceholder from "../assets/ChatGPT_Image_Jun_23__2025__02_58_35_PM-removebg-preview.png";
+import  giftPlaceholder1 from "../assets/ChatGPT_Image_Jun_23__2025__02_59_37_PM-removebg-preview.png";
+import giftPlaceholder2 from "../assets/ChatGPT_Image_Jun_23__2025__03_19_10_PM-removebg-preview.png";
+ import giftPlaceholder3 from "../assets/ChatGPT_Image_Jun_23__2025__03_21_13_PM-removebg-preview.png";
+ import giftPlaceholder4 from "../assets/ChatGPT_Image_Jun_23__2025__03_24_19_PM-removebg-preview.png";
+ import giftPlaceholder5 from "../assets/ChatGPT_Image_Jun_23__2025__03_26_42_PM-removebg-preview.png";
+ import giftPlaceholder6 from "../assets/ChatGPT_Image_Jun_23__2025__03_29_34_PM-removebg-preview.png";
+import gfs from "../assets/ChatGPT_Image_Jun_23__2025__03_31_56_PM-removebg-preview.png"
 
 
 const allGiftCards = [
@@ -87,42 +93,42 @@ const allGiftCards = [
     name: "Top Mobile Gift Card 10€",
     desc: "Kartë dhurate nga Top Mobile për çdo rast.",
     price: 10,
-    image: giftPlaceholder,
+    image: giftPlaceholder2,
   },
   {
     id: 22,
     name: "Top Mobile Gift Card 20€",
     desc: "Kartë dhurate nga Top Mobile për çdo rast.",
     price: 20,
-    image: giftPlaceholder,
+    image: giftPlaceholder1,
   },
   {
     id: 23,
     name: "Top Mobile Gift Card 30€",
     desc: "Kartë dhurate nga Top Mobile për çdo rast.",
     price: 30,
-    image: giftPlaceholder,
+    image: giftPlaceholder3,
   },
   {
     id: 24,
     name: "Top Mobile Gift Card 50€",
     desc: "Kartë dhurate nga Top Mobile për çdo rast.",
     price: 50,
-    image: giftPlaceholder,
+    image: giftPlaceholder4,
   },
   {
     id: 25,
     name: "Top Mobile Gift Card 70€",
     desc: "Kartë dhurate nga Top Mobile për çdo rast.",
     price: 70,
-    image: giftPlaceholder,
+    image: giftPlaceholder5,
   },
   {
     id: 26,
     name: "Top Mobile Gift Card 100€",
     desc: "Kartë dhurate nga Top Mobile për çdo rast.",
     price: 100,
-    image: giftPlaceholder,
+    image: giftPlaceholder6,
   },
   {
     id: 27,
