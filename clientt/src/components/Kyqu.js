@@ -36,12 +36,31 @@ const Kyqu = () => {
  
 
   // Kyçja me email/password (login klasik)
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: bëje login-in te backend
-    // nëse login është me sukses:
-    navigate("/");
+    setLoading(true);
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: email, password }),
+      });
+      const data = await res.json();
+  
+      if (res.ok && data.token) {
+        // Ruaj token-in për përdorim të mëvonshëm
+        localStorage.setItem("token", data.token);
+        // Ridrejto te ballina ose dashboard
+        navigate("/");
+      } else {
+        alert(data.error || "Gabim gjatë kyçjes!");
+      }
+    } catch (err) {
+      alert("Gabim gjatë kyçjes!");
+    }
+    setLoading(false);
   };
+  
 
   return (
     <Box
