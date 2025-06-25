@@ -4,125 +4,122 @@ import { useCart } from "../CartContext";
 
 
 const demoProducts = [
-  // ... vendos produktet tuaja këtu si fallback nëse s’ka asgjë nga API
+
+  {
+    id: 1,
+    name: "iPhone 15 Pro Max",
+    desc: "Apple iPhone 15 Pro Max, 256GB, Blue Titanium.",
+    price: 1240,
+    oldPrice: 1399,
+    image: "https://example.com/iphone15promax.jpg"
+  },
 ];
 
 
 function ProductCard({ product, addToCart }) {
   return (
     <Card
+    sx={{
+      borderRadius: 3,
+      boxShadow: "0 4px 32px #00132b12", // hije më neutrale, e butë
+      border: "none",
+      bgcolor: "#fff",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "stretch",
+      p: 0,
+      minHeight: 340,
+      height: "100%",
+      justifyContent: "space-between",
+      transition: "box-shadow 0.18s, transform 0.15s",
+      "&:hover": {
+        boxShadow: "0 12px 40px #02304722",
+        transform: "translateY(-4px) scale(1.025)"
+      },
+      mb: 2,
+      position: "relative"
+    }}
+  >
+    <Box
       sx={{
-        borderRadius: 1.5,
-        boxShadow: "none",
-        border: "none",
-        bgcolor: "#fff",
+        p: 2.5,
+        pb: 1,
         display: "flex",
-        flexDirection: "column",
-        alignItems: "stretch",
-        p: 0,
-        minHeight: 340,
-        height: "100%",
-        justifyContent: "space-between",
-        transition: "box-shadow 0.14s, border 0.14s, transform 0.13s",
-        "&:hover": {
-          boxShadow: "0 8px 32px #ff800018",
-          border: "1.3px solid #ff8000",
-          transform: "translateY(-4px) scale(1.028)"
-        },
-        mb: 2,
-        position: "relative"
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: 160,
+        background: "#fafbfc",
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
       }}
     >
-      {product.oldPrice && product.oldPrice > product.price && (
-        <Typography
-          sx={{
-            position: "absolute",
-            top: 16,
-            left: 16,
-            background: "#ff8000",
-            color: "#fff",
-            px: 2,
-            py: "2.5px",
-            borderRadius: "8px",
-            fontWeight: 700,
-            fontSize: 15,
-            zIndex: 1,
-          }}
-        >
-          -{Math.round(100 - (product.price / product.oldPrice) * 100)}%
-        </Typography>
-      )}
-      <Box
-        sx={{
-          p: 2,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: 150,
-          background: "#fafbfc",
-          borderTopLeftRadius: 6,
-          borderTopRightRadius: 6,
+      <img
+        src={product.image || "https://via.placeholder.com/300x150"}
+        alt={product.name}
+        style={{
+          maxHeight: 100,
+          maxWidth: "100%",
+          objectFit: "contain",
+          display: "block",
+          margin: "0 auto",
         }}
-      >
-        <img
-          src={product.image || "https://via.placeholder.com/300x150"}
-          alt={product.name}
-          style={{
-            maxHeight: 110,
-            maxWidth: "90%",
-            objectFit: "contain",
-            display: "block",
-            margin: "0 auto",
-          }}
-        />
-      </Box>
-      <CardContent sx={{ px: 2, py: 1.5, flex: 1 }}>
-        <Typography fontWeight={600} fontSize={15} color="#222" sx={{ mb: .5, minHeight: 36 }}>
-          {product.name}
-        </Typography>
-        <Typography color="#888" fontSize={13} sx={{ mb: 1, minHeight: 25 }}>
-          {product.desc || product.description}
-        </Typography>
-        <Box sx={{ mb: 2 }}>
-          {product.oldPrice && product.oldPrice > product.price && (
-            <span style={{
-              textDecoration: "line-through",
-              color: "#bbb",
-              fontSize: 15,
-              marginRight: 7
-            }}>
-              €{product.oldPrice}
-            </span>
-          )}
-          <Typography component="span" fontWeight={700} color="#023047" fontSize={20}>
-            €{product.price}
-          </Typography>
-        </Box>
-      </CardContent>
-      <Box sx={{ px: 2, pb: 2 }}>
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
-            borderRadius: 1.5,
-            background: "#023047",
-            color: "#fff",
-            fontWeight: 600,
-            boxShadow: "none",
-            textTransform: "none",
-            fontSize: 16,
-            py: 1,
-            transition: "background 0.13s",
-            "&:hover": {
-              background: "#e66e00"
-            }
-          }}
-          onClick={() => addToCart(product)}
+      />
+    </Box>
+    <CardContent sx={{ px: 2, py: 1, flex: 1 }}>
+      <Typography fontWeight={800} fontSize={17} color="#1a202c" sx={{ mb: 0.7, minHeight: 36 }}>
+        {product.name}
+      </Typography>
+      <Typography color="#505a70" fontSize={14} sx={{ mb: 1, minHeight: 23 }}>
+        {product.desc || product.description}
+      </Typography>
+      <Box sx={{ mb: 2 }}>
+        {product.oldPrice && product.oldPrice > product.price && (
+          <span style={{
+            textDecoration: "line-through",
+            color: "#bbb",
+            fontSize: 15,
+            marginRight: 7
+          }}>
+            €{product.oldPrice}
+          </span>
+        )}
+        <Typography
+          component="span"
+          fontWeight={800}
+          color="#FF8000"
+          fontSize={20}
+          sx={{ letterSpacing: 0.5 }}
         >
-          Shto në Shportë 🛒
-        </Button>
+          €{product.price}
+        </Typography>
       </Box>
-    </Card>
+    </CardContent>
+    <Box sx={{ px: 2, pb: 2 }}>
+      <Button
+        variant="contained"
+        sx={{
+          width: "100%",
+          borderRadius: 2.5,
+          background: "#012C39", // blu e thellë
+          color: "#fff",
+          fontWeight: 700,
+          fontSize: 16,
+          boxShadow: "none",
+          textTransform: "none",
+          py: 1.15,
+          transition: "background 0.16s",
+          "&:hover": {
+            background: "#ff8000",
+            color: "#fff"
+          }
+        }}
+        onClick={() => addToCart(product)}
+      >
+        Shto në Shportë <span style={{ marginLeft: 6, fontSize: 17 }}>🛒</span>
+      </Button>
+    </Box>
+  </Card>
+  
   );
 }
 

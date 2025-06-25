@@ -1,9 +1,15 @@
+// src/pages/ProfileSettings.js
+
 import React, { useState } from "react";
-import { Paper, Typography, TextField, Button, Box, Snackbar, Alert } from "@mui/material";
+import { Paper, Typography, TextField, Button, Snackbar, Alert, Stack, Avatar } from "@mui/material";
+import PersonIcon from '@mui/icons-material/Person';
 
 export function ProfileSettings() {
-  // Shembull: Merr nga API këto
-  const [form, setForm] = useState({ emri: "Admin", email: "admin@topmobile.com", tel: "049123456" });
+  const [form, setForm] = useState({
+    emri: "Admin",
+    email: "admin@topmobile.com",
+    tel: "049123456"
+  });
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
   const handleSubmit = async (e) => {
@@ -13,10 +19,13 @@ export function ProfileSettings() {
   };
 
   return (
-    <Paper sx={{ p: 3, mb: 3, borderRadius: 4 }}>
-      <Typography fontWeight={700} mb={2} color="#50577a">
-        Profili Personal
-      </Typography>
+    <Paper sx={{ p: 4, mb: 4, borderRadius: 5, boxShadow: "0 4px 32px #ff80001c" }}>
+      <Stack direction="row" alignItems="center" gap={2} mb={2}>
+        <Avatar sx={{ bgcolor: "#ff8000" }}><PersonIcon /></Avatar>
+        <Typography fontWeight={700} fontSize={20} color="#50577a">
+          Profili Personal
+        </Typography>
+      </Stack>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Emri"
@@ -36,7 +45,8 @@ export function ProfileSettings() {
           onChange={e => setForm(f => ({ ...f, tel: e.target.value }))}
           sx={{ mb: 2, width: "100%" }}
         />
-        <Button type="submit" variant="contained" color="warning" sx={{ fontWeight: 700 }}>
+        <Button type="submit" variant="contained" color="warning"
+          sx={{ fontWeight: 700, borderRadius: 3, px: 3, mt: 1, boxShadow: "0 2px 8px #ff800028" }}>
           Ruaj ndryshimet
         </Button>
       </form>

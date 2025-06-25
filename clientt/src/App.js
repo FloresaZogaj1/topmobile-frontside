@@ -29,6 +29,8 @@ import PjeseTelefona from "./pages/PjeseTelefona";
 import PjesePlaystation from "./pages/PjesePlaystation";
 import ServisiPerkrahja from "./pages/ServisiPerkrahja";
 import AsistencaMobile from "./pages/AsistencaMobile";
+import Kyqu from "./components/Kyqu";
+import Regjistrohu from "./components/Regjistrohu";
 
 
 function App() {
@@ -82,6 +84,10 @@ function App() {
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/kyqu" element={<Kyqu/>} />
+          <Route path="/regjistrohu" element={<Regjistrohu />} />
+
+
 
         </Routes>
         <Footer />

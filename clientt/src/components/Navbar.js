@@ -30,6 +30,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import logo from "../assets/PFP-01__5_-removebg-preview.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../CartContext";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Navbar = ({ loggedIn, handleLogout }) => {
   const [anchorElProducts, setAnchorElProducts] = React.useState(null);
@@ -315,6 +316,31 @@ const Navbar = ({ loggedIn, handleLogout }) => {
                 )}
               </IconButton>
             </Link>
+            {!loggedIn && (
+  <Button
+    component={Link}
+    to="/kyqu"
+    sx={{
+      color: "#fff",
+      bgcolor: "#ff8000",
+      borderRadius: 3,
+      textTransform: "none",
+      fontWeight: 600,
+      ml: 1,
+      px: 2.2,
+      py: 1.1,
+      boxShadow: 1,
+      '&:hover': { bgcolor: "#ff6600", color: "#fff" },
+      display: "flex",
+      alignItems: "center",
+      gap: 1
+    }}
+    startIcon={<AccountCircleIcon sx={{ color: "#fff" }} />}
+  >
+    Kyqu
+  </Button>
+)}
+
 
             {loggedIn && role === "admin" && (
               <Button onClick={onLogout} sx={{ color: "#ff8000", fontWeight: 600 }}>
