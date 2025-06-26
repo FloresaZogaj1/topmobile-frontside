@@ -10,27 +10,13 @@ const Regjistrohu = () => {
   const [tel, setTel] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ emri, email, password, tel }),
-        credentials: "include"
-      });
-      const data = await res.json();
-      if (res.ok) {
-        alert("Regjistrimi u krye me sukses!");
-        navigate("/kycu");
-      } else {
-        alert(data.error || "Gabim gjatë regjistrimit!");
-      }
-    } catch (err) {
-      alert("Gabim gjatë regjistrimit!");
-    }
+    // TODO: dërgo të dhënat te backend për regjistrim
+    alert(`Emri: ${emri}\nEmail: ${email}\nTel: ${tel}\nFjalëkalimi: ${password}`);
+    // pas regjistrimit, ridrejto te login/ballina
+    navigate("/kycu");
   };
-  
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>

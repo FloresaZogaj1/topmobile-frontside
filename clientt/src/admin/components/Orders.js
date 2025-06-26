@@ -11,9 +11,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteIcon from "@mui/icons-material/DeleteForever";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 const token = localStorage.getItem("token");
-
 
 const STATUS_COLORS = {
   "Në pritje": { color: "#a97700", bg: "#fff8e2", icon: <HourglassBottomIcon fontSize="small" /> },

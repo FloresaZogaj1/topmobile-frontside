@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Checkbox, FormControlLabel, Paper, Divider } from "@mui/material";
 import GoogleIcon from '@mui/icons-material/Google';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import logo from "../assets/PFP-01__5_-removebg-preview.png";
 import { useNavigate } from "react-router-dom";
-import { auth, GoogleAuthProvider,  signInWithPopup } from "../firebase";
+import { auth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from "../firebase";
 
 const Kyqu = () => {
   const [email, setEmail] = useState("");
@@ -39,16 +40,17 @@ const Kyqu = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/login`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-        credentials: "include"
+        body: JSON.stringify({ username: email, password }),
       });
       const data = await res.json();
   
       if (res.ok && data.token) {
+        // Ruaj token-in për përdorim të mëvonshëm
         localStorage.setItem("token", data.token);
+        // Ridrejto te ballina ose dashboard
         navigate("/");
       } else {
         alert(data.error || "Gabim gjatë kyçjes!");
@@ -58,7 +60,6 @@ const Kyqu = () => {
     }
     setLoading(false);
   };
-  
   
 
   return (
