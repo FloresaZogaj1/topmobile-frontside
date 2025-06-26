@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Container, Card, CardContent, Typography, Button, Box } from "@mui/material";
 import { useCart } from "../CartContext";
+console.log("PRODUCTION API URL:", process.env.REACT_APP_API_URL);
+
+fetch(`${process.env.REACT_APP_API_URL}/api/products`)
+  .then(r => r.json())
+  .then(data => console.log("API PRODUCTS:", data))
+  .catch(e => console.log("API ERROR:", e));
 
 const demoProducts = [
   // ... vendos produktet tuaja këtu si fallback nëse s’ka asgjë nga API
