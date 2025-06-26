@@ -7,8 +7,9 @@ import DeleteIcon from '@mui/icons-material/DeleteForever';
 import PersonIcon from "@mui/icons-material/Person";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL;
 const token = localStorage.getItem("token");
+
 
 export default function Customers() {
   const [clients, setClients] = useState([]);
