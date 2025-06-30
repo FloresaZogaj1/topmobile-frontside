@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Container, Card, CardContent, Typography, Button, Box } from "@mui/material";
+import { Container, Card, CardContent, Typography, Button, Box, CircularProgress } from "@mui/material";
 import { useCart } from "../CartContext";
-console.log("PRODUCTION API URL:", process.env.REACT_APP_API_URL);
 
-fetch(`${process.env.REACT_APP_API_URL}/api/products`)
-  .then(r => r.json())
-  .then(data => console.log("API PRODUCTS:", data))
-  .catch(e => console.log("API ERROR:", e));
-
-const demoProducts = [
-  // ... vendos produktet tuaja këtu si fallback nëse s’ka asgjë nga API
-];
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const token   = localStorage.getItem("token");
 
 function ProductCard({ product, addToCart }) {
   return (
@@ -22,48 +15,48 @@ function ProductCard({ product, addToCart }) {
         bgcolor: "#fff",
         display: "flex",
         flexDirection: "column",
-        alignItems: "stretch",
-        p: 0,
-        minHeight: 340,
-        height: "100%",
         justifyContent: "space-between",
-        transition: "box-shadow 0.14s, border 0.14s, transform 0.13s",
+        position: "relative",
+        transition: "transform 0.13s, box-shadow 0.14s",
         "&:hover": {
+          transform: "translateY(-4px) scale(1.02)",
           boxShadow: "0 8px 32px #ff800018",
-          border: "1.3px solid #ff8000",
-          transform: "translateY(-4px) scale(1.028)"
+          border: "1px solid #ff8000",
         },
+        minHeight: 340,
         mb: 2,
-        position: "relative"
       }}
     >
-      {product.oldPrice && product.oldPrice > product.price && (
+      {/* Discount badge */}
+      {product.oldPrice > product.price && (
         <Typography
           sx={{
             position: "absolute",
             top: 16,
             left: 16,
-            background: "#ff8000",
+            bgcolor: "#ff8000",
             color: "#fff",
             px: 2,
-            py: "2.5px",
+            py: "2px",
             borderRadius: "8px",
             fontWeight: 700,
-            fontSize: 15,
+            fontSize: 14,
             zIndex: 1,
           }}
         >
           -{Math.round(100 - (product.price / product.oldPrice) * 100)}%
         </Typography>
       )}
+
+      {/* Image */}
       <Box
         sx={{
           p: 2,
+          bgcolor: "#fafbfc",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           minHeight: 150,
-          background: "#fafbfc",
           borderTopLeftRadius: 6,
           borderTopRightRadius: 6,
         }}
@@ -71,55 +64,46 @@ function ProductCard({ product, addToCart }) {
         <img
           src={product.image || "https://via.placeholder.com/300x150"}
           alt={product.name}
-          style={{
-            maxHeight: 110,
-            maxWidth: "90%",
-            objectFit: "contain",
-            display: "block",
-            margin: "0 auto",
-          }}
+          style={{ maxHeight: 110, maxWidth: "90%", objectFit: "contain" }}
         />
       </Box>
-      <CardContent sx={{ px: 2, py: 1.5, flex: 1 }}>
-        <Typography fontWeight={600} fontSize={15} color="#222" sx={{ mb: .5, minHeight: 36 }}>
+
+      {/* Content */}
+      <CardContent sx={{ pt: 1, flex: 1 }}>
+        <Typography fontWeight={600} fontSize={15} color="#222" sx={{ mb: 0.5, minHeight: 36 }}>
           {product.name}
         </Typography>
         <Typography color="#888" fontSize={13} sx={{ mb: 1, minHeight: 25 }}>
-          {product.desc || product.description}
+          {product.description || product.desc}
         </Typography>
         <Box sx={{ mb: 2 }}>
-          {product.oldPrice && product.oldPrice > product.price && (
-            <span style={{
-              textDecoration: "line-through",
-              color: "#bbb",
-              fontSize: 15,
-              marginRight: 7
-            }}>
+          {product.oldPrice > product.price && (
+            <Typography
+              component="span"
+              sx={{ textDecoration: "line-through", color: "#bbb", mr: 1 }}
+            >
               €{product.oldPrice}
-            </span>
+            </Typography>
           )}
-          <Typography component="span" fontWeight={700} color="#023047" fontSize={20}>
+          <Typography component="span" fontWeight={700} fontSize={20} color="#023047">
             €{product.price}
           </Typography>
         </Box>
       </CardContent>
+
+      {/* Add to cart */}
       <Box sx={{ px: 2, pb: 2 }}>
         <Button
+          fullWidth
           variant="contained"
           sx={{
-            width: "100%",
-            borderRadius: 1.5,
-            background: "#023047",
+            bgcolor: "#023047",
             color: "#fff",
-            fontWeight: 600,
-            boxShadow: "none",
             textTransform: "none",
+            fontWeight: 600,
             fontSize: 16,
-            py: 1,
-            transition: "background 0.13s",
-            "&:hover": {
-              background: "#e66e00"
-            }
+            borderRadius: 1.5,
+            "&:hover": { bgcolor: "#e66e00" },
           }}
           onClick={() => addToCart(product)}
         >
@@ -130,37 +114,51 @@ function ProductCard({ product, addToCart }) {
   );
 }
 
-const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [search, setSearch] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
+export default function Products() {
+  const [products, setProducts] = useState(null); // null = loading
+  const [search, setSearch]       = useState("");
+  const [minPrice, setMinPrice]   = useState("");
+  const [maxPrice, setMaxPrice]   = useState("");
   const { addToCart } = useCart();
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data) && data.length > 0) {
-          setProducts(data);
-        } else {
-          setProducts(demoProducts);
-        }
-      })
-      .catch(() => {
-        setProducts(demoProducts);
-      });
+    (async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/products`, {
+          headers: {
+            // nëse endpoint kërkon token admin:
+            // Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) throw new Error(`Fetch error ${res.status}`);
+        const data = await res.json();
+        setProducts(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("fetchProducts error:", err);
+        setProducts([]); 
+      }
+    })();
   }, []);
 
+  // kur products===null => po jet loading
+  if (products === null) {
+    return (
+      <Box sx={{ textAlign: "center", py: 10 }}>
+        <CircularProgress color="primary" />
+      </Box>
+    );
+  }
+
+  // filtrimi
   const filtered = products.filter(p => {
-    const matchesSearch =
-      p.name.toLowerCase().includes(search.toLowerCase()) ||
-      (p.desc?.toLowerCase().includes(search.toLowerCase()) ||
-       p.description?.toLowerCase().includes(search.toLowerCase()));
+    const name = p.name?.toLowerCase() || "";
+    const desc = (p.description || p.desc || "").toLowerCase();
+    const q    = search.toLowerCase();
+    const matchesSearch = name.includes(q) || desc.includes(q);
     const price = Number(p.price);
-    const matchesMin = minPrice === "" || price >= Number(minPrice);
-    const matchesMax = maxPrice === "" || price <= Number(maxPrice);
-    return matchesSearch && matchesMin && matchesMax;
+    const okMin  = minPrice === "" || price >= Number(minPrice);
+    const okMax  = maxPrice === "" || price <= Number(maxPrice);
+    return matchesSearch && okMin && okMax;
   });
 
   return (
@@ -168,58 +166,57 @@ const Products = () => {
       <Typography variant="h4" mb={4} fontWeight={700} color="#023047">
         Të gjitha produktet
       </Typography>
+
+      {/* Filter inputs */}
       <Box sx={{ display: "flex", gap: 2, mb: 4, flexWrap: "wrap" }}>
-        <Box component="input"
-          type="text"
+        <Box
+          component="input"
           placeholder="Kërko produkt..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          sx={{ padding: 1, borderRadius: 1, border: '1px solid #ddd', minWidth: 220, fontSize: 16 }}
+          sx={{ flex: 1, minWidth: 200, p:1, border: "1px solid #ddd", borderRadius:1 }}
         />
-        <Box component="input"
+        <Box
+          component="input"
           type="number"
           placeholder="Çmimi minimal"
           value={minPrice}
           onChange={e => setMinPrice(e.target.value)}
-          sx={{ padding: 1, borderRadius: 1, border: '1px solid #ddd', minWidth: 120, fontSize: 16 }}
+          sx={{ width: 120, p:1, border: "1px solid #ddd", borderRadius:1 }}
         />
-        <Box component="input"
+        <Box
+          component="input"
           type="number"
           placeholder="Çmimi maksimal"
           value={maxPrice}
           onChange={e => setMaxPrice(e.target.value)}
-          sx={{ padding: 1, borderRadius: 1, border: '1px solid #ddd', minWidth: 120, fontSize: 16 }}
+          sx={{ width: 120, p:1, border: "1px solid #ddd", borderRadius:1 }}
         />
       </Box>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: 4,
-          '@media (max-width: 1200px)': {
-            gridTemplateColumns: 'repeat(3, 1fr)',
-          },
-          '@media (max-width: 900px)': {
-            gridTemplateColumns: 'repeat(2, 1fr)',
-          },
-          '@media (max-width: 600px)': {
-            gridTemplateColumns: '1fr',
-          },
-        }}
-      >
-        {filtered.map(product => (
-          <Box key={product.id} sx={{ height: "100%" }}>
-            <ProductCard product={product} addToCart={addToCart} />
-          </Box>
-        ))}
-      </Box>
-      {filtered.length === 0 && (
-        <Typography sx={{ color: "#023047", textAlign: "center", width: "100%", py: 10, fontSize: 20, fontWeight: 600 }}>
+
+      {/* Product grid */}
+      {filtered.length > 0 ? (
+        <Box
+          sx={{
+            display: "grid",
+            gap: 4,
+            gridTemplateColumns: "repeat(4,1fr)",
+            "@media (max-width:1200px)": { gridTemplateColumns: "repeat(3,1fr)" },
+            "@media (max-width:900px)": { gridTemplateColumns: "repeat(2,1fr)" },
+            "@media (max-width:600px)": { gridTemplateColumns: "1fr" },
+          }}
+        >
+          {filtered.map(prod => (
+            <ProductCard key={prod.id} product={prod} addToCart={addToCart} />
+          ))}
+        </Box>
+      ) : (
+        <Typography
+          sx={{ textAlign: "center", py: 10, color: "#023047", fontSize: 18, fontWeight: 600 }}
+        >
           S’ka produkte.
         </Typography>
       )}
     </Container>
   );
-};
-
-export default Products;
+}

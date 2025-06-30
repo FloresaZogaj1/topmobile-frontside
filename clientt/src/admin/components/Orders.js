@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody,
-  Chip, IconButton, Menu, MenuItem, CircularProgress, Tooltip, Button, Stack
+  Box,
+  Typography,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Chip,
+  IconButton,
+  Menu,
+  MenuItem,
+  CircularProgress,
+  Tooltip,
+  Button,
+  Stack
 } from "@mui/material";
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
@@ -15,10 +29,10 @@ const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 const token = localStorage.getItem("token");
 
 const STATUS_COLORS = {
-  "Në pritje": { color: "#a97700", bg: "#fff8e2", icon: <HourglassBottomIcon fontSize="small" /> },
-  "Në dërgesë": { color: "#1976d2", bg: "#e8f4fd", icon: <LocalShippingIcon fontSize="small" /> },
-  "Kryer": { color: "#00966c", bg: "#e8fff3", icon: <DoneAllIcon fontSize="small" /> },
-  "Refuzuar": { color: "#b80020", bg: "#ffe4e4", icon: <CancelIcon fontSize="small" /> }
+  "Në pritje":    { color: "#a97700", bg: "#fff8e2", icon: <HourglassBottomIcon fontSize="small" /> },
+  "Në dërgesë":   { color: "#1976d2", bg: "#e8f4fd", icon: <LocalShippingIcon fontSize="small" /> },
+  "Kryer":        { color: "#00966c", bg: "#e8fff3", icon: <DoneAllIcon fontSize="small" /> },
+  "Refuzuar":     { color: "#b80020", bg: "#ffe4e4", icon: <CancelIcon fontSize="small" /> }
 };
 
 const statusList = ["Në pritje", "Në dërgesë", "Kryer", "Refuzuar"];
@@ -43,48 +57,60 @@ export default function Orders() {
       });
       const data = await res.json();
       setOrders(Array.isArray(data) ? data.reverse() : []);
-    } catch {
+    } catch (err) {
+      console.error("fetchOrders error:", err);
       setOrders([]);
     }
     setLoading(false);
   };
-
   const handleStatusChange = async (orderId, newStatus) => {
-    await fetch(`${API_URL}/api/orders/${orderId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ status: newStatus })
-    });
-    fetchOrders();
-    setAnchorEl(null);
-    setSelectedOrderId(null);
+    try {
+      const res = await fetch(`${API_URL}/api/orders/${orderId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!res.ok) throw new Error(`Error ${res.status}`);
+      // Rinemë listën e porosive nga serveri
+      await fetchOrders();
+      // Dhe aktivizo “Të gjitha” në filter
+      setFilterStatus("Të gjitha");
+    } catch (e) {
+      console.error(e);
+    } finally {
+      handleMenuClose();
+    }
   };
+  
+
 
   const handleDelete = async (orderId) => {
     if (!window.confirm("A je i sigurt që do ta fshish këtë porosi?")) return;
-    await fetch(`${API_URL}/api/orders/${orderId}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    fetchOrders();
+    try {
+      const res = await fetch(`${API_URL}/api/orders/${orderId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error(`Delete dështoi (${res.status})`);
+      fetchOrders();
+    } catch (err) {
+      console.error("handleDelete error:", err);
+    }
   };
 
-  // Open status menu
   const handleMenuOpen = (event, orderId) => {
     setAnchorEl(event.currentTarget);
     setSelectedOrderId(orderId);
   };
 
-  // Close menu
   const handleMenuClose = () => {
     setAnchorEl(null);
     setSelectedOrderId(null);
   };
 
-  // Filtron porositë sipas statusit
   const filteredOrders =
     filterStatus === "Të gjitha"
       ? orders
@@ -103,8 +129,12 @@ export default function Orders() {
       <Typography
         variant="h4"
         sx={{
-          color: "#ff8000", fontWeight: 700, textAlign: "center",
-          mb: 3, letterSpacing: 1.1, textTransform: "uppercase"
+          color: "#ff8000",
+          fontWeight: 700,
+          textAlign: "center",
+          mb: 3,
+          letterSpacing: 1.1,
+          textTransform: "uppercase"
         }}
       >
         Porositë e Dërguara
@@ -120,18 +150,27 @@ export default function Orders() {
             color={status === "Refuzuar" ? "error" : status === "Kryer" ? "success" : "warning"}
             sx={{
               bgcolor: filterStatus === status
-                ? (status === "Refuzuar" ? "#b80020" : status === "Kryer" ? "#00966c" : "#ff8000")
+                ? (status === "Refuzuar"
+                    ? "#b80020"
+                    : status === "Kryer"
+                      ? "#00966c"
+                      : "#ff8000")
                 : "#fff",
               color: filterStatus === status ? "#fff" : "#666",
               borderRadius: 3,
-              px: 2.5, fontWeight: 700, boxShadow: filterStatus === status ? 2 : 0,
+              px: 2.5,
+              fontWeight: 700,
+              boxShadow: filterStatus === status ? 2 : 0,
               textTransform: "none",
               fontSize: 15,
               '&:hover': {
                 bgcolor:
-                  status === "Refuzuar" ? "#e64949"
-                    : status === "Kryer" ? "#13b07c"
-                      : status === "Në dërgesë" ? "#0e89db"
+                  status === "Refuzuar"
+                    ? "#e64949"
+                    : status === "Kryer"
+                      ? "#13b07c"
+                      : status === "Në dërgesë"
+                        ? "#0e89db"
                         : "#ff8000",
                 color: "#fff"
               }
@@ -175,11 +214,15 @@ export default function Orders() {
             )}
             {filteredOrders.map((order, i) => {
               const status = order.status || "Në pritje";
-              const st = STATUS_COLORS[status] || STATUS_COLORS["Në pritje"];
+              const colorObj = STATUS_COLORS[status] || STATUS_COLORS["Në pritje"];
               let itemsArr = [];
               try {
-                itemsArr = typeof order.items === "string" ? JSON.parse(order.items) : order.items || [];
-              } catch { itemsArr = []; }
+                itemsArr = typeof order.items === "string"
+                  ? JSON.parse(order.items)
+                  : order.items || [];
+              } catch {
+                itemsArr = [];
+              }
               return (
                 <TableRow
                   key={order.id}
@@ -209,11 +252,11 @@ export default function Orders() {
                   </TableCell>
                   <TableCell>
                     <Chip
-                      icon={st.icon}
+                      icon={colorObj.icon}
                       label={status}
                       sx={{
-                        bgcolor: st.bg,
-                        color: st.color,
+                        bgcolor: colorObj.bg,
+                        color: colorObj.color,
                         fontWeight: 600,
                         px: 2,
                         fontSize: 16,
@@ -226,12 +269,12 @@ export default function Orders() {
                   <TableCell>
                     {order.createdAt
                       ? new Date(order.createdAt).toLocaleString("sq-AL", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit"
-                      })
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit"
+                        })
                       : "-"}
                   </TableCell>
                   <TableCell align="center">
@@ -244,6 +287,22 @@ export default function Orders() {
                         <MoreVertIcon />
                       </IconButton>
                     </Tooltip>
+                    {/* Dropdown status */}
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={selectedOrderId === order.id && Boolean(anchorEl)}
+                      onClose={handleMenuClose}
+                    >
+                      {statusList.map(s => (
+                        <MenuItem
+                          key={s}
+                          onClick={() => handleStatusChange(order.id, s)}
+                          selected={order.status === s}
+                        >
+                          {s}
+                        </MenuItem>
+                      ))}
+                    </Menu>
                     <Tooltip title="Fshi porosinë">
                       <IconButton
                         onClick={() => handleDelete(order.id)}
@@ -253,22 +312,6 @@ export default function Orders() {
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
-                    {/* Dropdown status */}
-                    <Menu
-                      anchorEl={anchorEl}
-                      open={selectedOrderId === order.id && Boolean(anchorEl)}
-                      onClose={handleMenuClose}
-                    >
-                      {statusList.map(st => (
-                        <MenuItem
-                          key={st}
-                          onClick={() => handleStatusChange(order.id, st)}
-                          selected={status === st}
-                        >
-                          {st}
-                        </MenuItem>
-                      ))}
-                    </Menu>
                   </TableCell>
                 </TableRow>
               );
