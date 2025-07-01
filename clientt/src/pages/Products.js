@@ -126,8 +126,9 @@ export default function Products() {
       try {
         const res = await fetch(`${API_URL}/api/products`, {
           headers: {
-            // nëse endpoint kërkon token admin:
-            // Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token"),
+          
           },
         });
         if (!res.ok) throw new Error(`Fetch error ${res.status}`);
