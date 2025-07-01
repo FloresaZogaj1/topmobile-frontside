@@ -44,7 +44,8 @@ const AdminOrders = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/orders", {
+    const API_URL = process.env.REACT_APP_API_URL;
+    fetch(`${API_URL}/api/orders`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -58,7 +59,7 @@ const AdminOrders = () => {
         setLoading(false);
       });
   }, []);
-
+  
   if (loading)
     return (
       <div style={{ textAlign: "center", marginTop: 80 }}>

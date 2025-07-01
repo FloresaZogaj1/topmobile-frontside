@@ -27,9 +27,11 @@ const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
   const [deleteId, setDeleteId] = useState(null);
   const [changingId, setChangingId] = useState(null);
+  const API_URL = process.env.REACT_APP_API_URL;
+
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/orders")
+    fetch(`${API_URL}/api/orders`)
       .then(res => res.json())
       .then(setOrders);
   }, []);
@@ -37,7 +39,7 @@ const AdminOrders = () => {
   // Ndrysho statusin
   const handleStatusChange = async (id, newStatus) => {    
     setChangingId(id);
-    await fetch(`http://localhost:5000/api/orders/${id}`, {
+    await fetch(`${API_URL}/api/orders/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus })
@@ -49,7 +51,7 @@ const AdminOrders = () => {
   };
 
   const handleDelete = async () => {
-    await fetch(`http://localhost:5000/api/orders/${deleteId}`, { method: "DELETE" });
+    await fetch(`${API_URL}/api/orders/${deleteId}`, { method: "DELETE" });
     setOrders(orders => orders.filter(o => o.id !== deleteId));
     setDeleteId(null);
   };

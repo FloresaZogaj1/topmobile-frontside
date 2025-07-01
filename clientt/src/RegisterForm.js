@@ -6,17 +6,19 @@ const RegisterForm = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
     setMessage("");
     setError("");
-    fetch("http://localhost:5000/api/register", {
+    fetch(`${API_URL}/api/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     })
+    
       .then(res => res.json())
       .then(data => {
         setIsLoading(false);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Card, CardContent, Typography, Button, Box, CircularProgress } from "@mui/material";
 import { useCart } from "../CartContext";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL;
 const token   = localStorage.getItem("token");
 
 function ProductCard({ product, addToCart }) {

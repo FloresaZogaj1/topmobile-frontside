@@ -4,12 +4,13 @@ import { useState } from "react";
 export default function AddProduct() {
   const [form, setForm] = useState({ name: "", price: "", description: "", category: "", image: "" });
   const [message, setMessage] = useState("");
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/api/products", {
+    const res = await fetch(`${API_URL}/api/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,6 +21,7 @@ export default function AddProduct() {
     const data = await res.json();
     setMessage(res.ok ? "Produkti u shtua!" : data.error || "Gabim!");
   };
+  
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: 350, margin: "40px auto" }}>

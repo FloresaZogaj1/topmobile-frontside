@@ -7,7 +7,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import EuroIcon from "@mui/icons-material/Euro";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL;
 const token = localStorage.getItem("token");
 
 export default function Reports() {

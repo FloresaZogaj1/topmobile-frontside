@@ -6,7 +6,7 @@ const ProductsLists = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     axios

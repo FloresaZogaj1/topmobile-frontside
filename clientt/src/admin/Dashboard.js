@@ -4,8 +4,9 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import PeopleIcon from "@mui/icons-material/People";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL;
 const token = localStorage.getItem("token");
+
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
