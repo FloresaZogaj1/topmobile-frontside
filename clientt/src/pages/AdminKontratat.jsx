@@ -33,7 +33,17 @@ export default function AdminKontratat() {
         setLoading(true); setErr("");
         const { data } = await api.get("/api/contracts/softsave"); // backend në production ka /api prefix
         const dataArray = Array.isArray(data) ? data : (data.rows || data.data || []);
-        setRows(dataArray);
+        // normalize keys for UI
+        const normalized = dataArray.map(r => ({
+          ...r,
+          contract_no: r.contract_no || r.contractNo || '',
+          brand: r.device_brand || r.brand || '',
+          model: r.device_model || r.model || '',
+          version: r.device_name || r.version || '',
+          pay_type: r.payment_type || r.pay_type || '',
+          date_signed: r.start_date || r.date_signed || null,
+        }));
+        setRows(normalized);
       } catch (e) {
         setErr(e.message || "Gabim gjatë ngarkimit");
       } finally {
@@ -46,7 +56,16 @@ export default function AdminKontratat() {
   const reloadOne = async (id) => {
     try {
       const { data } = await api.get(`/api/contracts/softsave/${id}`);
-      setRows(r => r.map(x => x.id === id ? { ...x, ...data } : x));
+      const mapped = {
+        ...data,
+        contract_no: data.contract_no || data.contractNo || '',
+        brand: data.device_brand || data.brand || '',
+        model: data.device_model || data.model || '',
+        version: data.device_name || data.version || '',
+        pay_type: data.payment_type || data.pay_type || '',
+        date_signed: data.start_date || data.date_signed || null,
+      };
+      setRows(r => r.map(x => x.id === id ? { ...x, ...mapped } : x));
     } catch (e) { /* silent */ }
   };
 
