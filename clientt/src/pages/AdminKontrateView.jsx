@@ -24,7 +24,14 @@ export default function AdminKontrateView() {
   }, [id]);
 
   const handlePrint = () => {
-    setTimeout(() => window.print(), 50);
+    const el = document.getElementById('print-area');
+    if (!el) return window.print();
+    const css = `@page{size:A4;margin:10mm} body{background:#fff!important;color:#111;font-family:Inter,Arial} #print-area{width:210mm;min-height:297mm;padding:18mm 16mm;}`;
+    const win = window.open('', 'PRINT', 'width=840,height=1170');
+    if (!win) { window.print(); return; }
+    win.document.write('<!doctype html><html><head><meta charset="utf-8" /><title>Kontratë</title><style>' + css + '</style></head><body>' + el.outerHTML + '</body></html>');
+    win.document.close(); win.focus();
+    setTimeout(()=>{ try{win.print();}finally{win.close();} }, 200);
   };
 
   if (err) return <div style={{maxWidth:900, margin:"24px auto"}}>Gabim: {err}</div>;

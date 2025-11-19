@@ -298,9 +298,9 @@ export default function AdminKontratat() {
                     <td style={{ ...tdCell, fontVariantNumeric: "tabular-nums" }}>
                       {r.imei}
                     </td>
-                    <td style={tdCell}>{r.pay_type || "-"}</td>
+                    <td style={tdCell}>{(r.pay_type || r.payment_type) || "-"}</td>
                     <td style={{ ...tdCell, whiteSpace: "nowrap" }}>
-                      {r.date_signed
+                      {(r.date_signed || r.start_date)
                         ? new Date(r.date_signed).toLocaleDateString("sq-AL")
                         : "-"}
                     </td>
