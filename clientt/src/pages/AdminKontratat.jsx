@@ -22,6 +22,10 @@ export default function AdminKontratat() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
   const [q, setQ] = useState("");
+  const [editing, setEditing] = useState(null); // contract being edited
+  const [form, setForm] = useState({});
+  const [saving, setSaving] = useState(false);
+  const [printRow, setPrintRow] = useState(null);
 
   useEffect(() => {
     const load = async () => {
@@ -38,6 +42,70 @@ export default function AdminKontratat() {
     };
     load();
   }, []);
+
+  const reloadOne = async (id) => {
+    try {
+      const { data } = await api.get(`/api/contracts/softsave/${id}`);
+      setRows(r => r.map(x => x.id === id ? { ...x, ...data } : x));
+    } catch (e) { /* silent */ }
+  };
+
+  const startEdit = (row) => {
+    setEditing(row.id);
+    setForm({
+      emri: row.first_name || "",
+      mbiemri: row.last_name || "",
+      marka: row.device_brand || row.brand || "",
+      modeli: row.device_model || row.model || "",
+      pajisja: row.device_name || row.version || "",
+      imei: row.imei || "",
+      llojiPageses: row.payment_type || row.pay_type || "Cash",
+      data: (row.start_date || row.date_signed || "").slice(0,10),
+      komente: row.notes || ""
+    });
+  };
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setForm(f => ({ ...f, [name]: value }));
+  };
+
+  const saveEdit = async () => {
+    try {
+      setSaving(true); setErr("");
+      await api.put(`/api/contracts/softsave/${editing}`, form);
+      await reloadOne(editing);
+      setEditing(null);
+    } catch (e) {
+      setErr(e.response?.data?.message || e.message || "Gabim në përditësim");
+    } finally { setSaving(false); }
+  };
+
+  const cancelEdit = () => { setEditing(null); };
+
+  const deleteRow = async (id) => {
+    if (!window.confirm("Fshije përfundimisht kontratën?")) return;
+    try {
+      await api.delete(`/api/contracts/softsave/${id}`);
+      setRows(r => r.filter(x => x.id !== id));
+    } catch (e) {
+      alert(e.response?.data?.message || e.message || "Gabim në fshirje");
+    }
+  };
+
+  const printOne = (row) => {
+    setPrintRow(row);
+    setTimeout(() => {
+      const el = document.getElementById('admin-print-area');
+      if (!el) return;
+      const win = window.open('', 'PRINT', 'width=840,height=1170');
+      win.document.write('<!doctype html><html><head><title>Kontratë</title><meta charset="utf-8" />');
+      win.document.write('<style>@page{size:A4;margin:10mm}body{background:#fff;color:#111;font-family:Inter,Arial}#admin-print-area{width:210mm;min-height:297mm;padding:18mm 16mm;}</style>');
+      win.document.write('</head><body>' + el.outerHTML + '</body></html>');
+      win.document.close(); win.focus();
+      setTimeout(()=>{ win.print(); win.close(); setPrintRow(null); },300);
+    }, 100);
+  };
 
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
@@ -217,17 +285,11 @@ export default function AdminKontratat() {
                         ? new Date(r.date_signed).toLocaleDateString("sq-AL")
                         : "-"}
                     </td>
-                    <td style={{ ...tdCell, textAlign: "right" }}>
-                      <Link
-                        to={`/admin/kontratat/${r.id}`}
-                        style={{
-                          color: UI.accent,
-                          textDecoration: "none",
-                          fontWeight: 800,
-                        }}
-                      >
-                        Hap / Printo
-                      </Link>
+                    <td style={{ ...tdCell, textAlign: "right", whiteSpace:'nowrap' }}>
+                      <button onClick={()=>printOne(r)} style={actionBtn}>Print</button>
+                      <button onClick={()=>startEdit(r)} style={actionBtn}>Edit</button>
+                      <button onClick={()=>deleteRow(r.id)} style={{...actionBtn, color:'#ff4d4f'}}>Fshij</button>
+                      <Link to={`/admin/kontratat/${r.id}`} style={{...actionLink}}>Shiko</Link>
                     </td>
                   </tr>
                 ))
@@ -236,6 +298,57 @@ export default function AdminKontratat() {
           </table>
         </div>
       </div>
+
+      {/* Modal Edit */}
+      {editing && (
+        <div style={modalBackdrop}>
+          <div style={modalCard}>
+            <h3 style={{margin:'0 0 12px'}}>Përditëso kontratën #{editing}</h3>
+            <div style={formGrid}>
+              <label>Emri<input name="emri" value={form.emri||''} onChange={handleChange} /></label>
+              <label>Mbiemri<input name="mbiemri" value={form.mbiemri||''} onChange={handleChange} /></label>
+              <label>Marka<input name="marka" value={form.marka||''} onChange={handleChange} /></label>
+              <label>Modeli<input name="modeli" value={form.modeli||''} onChange={handleChange} /></label>
+              <label>Version/Pajisja<input name="pajisja" value={form.pajisja||''} onChange={handleChange} /></label>
+              <label>IMEI<input name="imei" value={form.imei||''} onChange={handleChange} /></label>
+              <label>Lloji Pagesës<input name="llojiPageses" value={form.llojiPageses||''} onChange={handleChange} /></label>
+              <label>Data<input type="date" name="data" value={form.data||''} onChange={handleChange} /></label>
+              <label style={{gridColumn:'1 / -1'}}>Komente<textarea name="komente" value={form.komente||''} onChange={handleChange} rows={3} /></label>
+            </div>
+            {err && <div style={{color:'#ff5e73', marginTop:8}}>Gabim: {err}</div>}
+            <div style={{display:'flex', justifyContent:'flex-end', gap:8, marginTop:16}}>
+              <button onClick={cancelEdit} disabled={saving} style={actionBtn}>Anulo</button>
+              <button onClick={saveEdit} disabled={saving} style={{...actionBtn, background:'#ff8000', color:'#0b0b0b'}}>{saving? 'Duke ruajtur…':'Ruaj'}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden print area for one row */}
+      {printRow && (
+        <div id="admin-print-area" style={{display:'none'}}>
+          <div style={{background:'#fff', padding:'18mm 16mm'}}>
+            <h1 style={{margin:0}}>KONTRATË SHËRBIMI “SOFT & SAVE”</h1>
+            <p><b>Nr.:</b> {printRow.contract_no} &nbsp; <b>Data:</b> {printRow.date_signed ? new Date(printRow.date_signed).toLocaleDateString('sq-AL') : ''}</p>
+            <p><b>Klienti:</b> {printRow.first_name} {printRow.last_name}</p>
+            <p><b>Pajisja:</b> {(printRow.brand||printRow.device_brand)||''} {(printRow.model||printRow.device_model)||''} {printRow.version?` (${printRow.version})`:''}</p>
+            <p><b>IMEI:</b> {printRow.imei}</p>
+            <p><b>Lloji i pagesës:</b> {printRow.pay_type || printRow.payment_type}</p>
+            <hr />
+            <p style={{fontSize:12}}>Kontrata mbulon mirëmbajtje software për pajisjen për 12 muaj: përditësime, optimizim, pastrim malware, backup dhe asistencë teknike.</p>
+            <div style={{display:'flex', justifyContent:'space-between', marginTop:'18mm'}}>
+              <div>
+                <div style={{borderBottom:'1px solid #222', minWidth:180, height:26}} />
+                <div style={{fontSize:11, color:'#666'}}>Klienti</div>
+              </div>
+              <div>
+                <div style={{borderBottom:'1px solid #222', minWidth:180, height:26}} />
+                <div style={{fontSize:11, color:'#666'}}>Top Mobile</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -250,4 +363,33 @@ const tdStrong = {
   ...tdCell,
   color: UI.accent,
   fontWeight: 900,
+};
+
+const actionBtn = {
+  background:'transparent',
+  border:'1px solid #1f1f1f',
+  color:'#ff8000',
+  fontSize:12,
+  padding:'4px 8px',
+  borderRadius:6,
+  cursor:'pointer',
+  marginLeft:4
+};
+const actionLink = {
+  color:'#49d17c',
+  fontSize:12,
+  fontWeight:800,
+  textDecoration:'none',
+  marginLeft:4
+};
+const modalBackdrop = {
+  position:'fixed', left:0, top:0, right:0, bottom:0,
+  background:'rgba(0,0,0,.65)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:1000
+};
+const modalCard = {
+  background:'#111', color:'#fff', padding:'20px 22px', borderRadius:12, width:'100%', maxWidth:600,
+  border:'1px solid #222', boxShadow:'0 12px 42px rgba(0,0,0,.45)'
+};
+const formGrid = {
+  display:'grid', gap:10, gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))'
 };
