@@ -113,17 +113,31 @@ export default function AdminKontratat() {
   };
 
   const printOne = (row) => {
-    setPrintRow(row);
-    setTimeout(() => {
-      const el = document.getElementById('admin-print-area');
-      if (!el) return;
-      const win = window.open('', 'PRINT', 'width=840,height=1170');
-      win.document.write('<!doctype html><html><head><title>Kontratë</title><meta charset="utf-8" />');
-      win.document.write('<style>@page{size:A4;margin:10mm}body{background:#fff;color:#111;font-family:Inter,Arial}#admin-print-area{width:210mm;min-height:297mm;padding:18mm 16mm;}</style>');
-      win.document.write('</head><body>' + el.outerHTML + '</body></html>');
-      win.document.close(); win.focus();
-      setTimeout(()=>{ win.print(); win.close(); setPrintRow(null); },300);
-    }, 100);
+    // Ndërto HTML direkt pa u mbështetur te element i fshehtë (eliminojmë boshllëkun)
+    const date = (row.date_signed || row.start_date) ? new Date(row.date_signed || row.start_date).toLocaleDateString('sq-AL') : '';
+    const pay = row.pay_type || row.payment_type || '';
+    const pajisja = `${row.brand || row.device_brand || ''} ${row.model || row.device_model || ''}${row.version ? ` (${row.version})` : ''}`.trim();
+    const html = `<!doctype html><html><head><meta charset="utf-8" /><title>Kontratë ${row.contract_no||''}</title>
+      <style>@page{size:A4;margin:10mm}body{background:#fff;color:#111;font-family:Inter,Arial;margin:0;} .wrap{width:210mm;min-height:297mm;padding:18mm 16mm;box-sizing:border-box;} h1{margin:0 0 4mm;font-size:20pt;} h2{margin:0 0 6mm;font-size:14pt;color:#333;} p{margin:4px 0;} hr{margin:10mm 0 6mm;border:none;border-top:1px solid #ccc;} .signs{display:flex;justify-content:space-between;margin-top:18mm;} .line{border-bottom:1px solid #222;min-width:180px;height:26px;} .small{font-size:11px;color:#666;margin-top:4px;} </style>
+      </head><body><div class="wrap">
+        <h1>KONTRATË SHËRBIMI</h1><h2>“SOFT & SAVE”</h2>
+        <p><strong>Nr. i Kontratës:</strong> ${row.contract_no||''}</p>
+        <p><strong>Data e lidhjes:</strong> ${date}</p>
+        <p><strong>Klienti:</strong> ${row.first_name||''} ${row.last_name||''}</p>
+        <p><strong>Pajisja:</strong> ${pajisja}</p>
+        <p><strong>IMEI:</strong> ${row.imei||''}</p>
+        <p><strong>Lloji i pagesës:</strong> ${pay}</p>
+        <hr />
+        <p style="font-size:12pt">Kontrata mbulon mirëmbajtje software për pajisjen për 12 muaj: përditësime, optimizim performance, pastrim malware, backup dhe asistencë teknike.</p>
+        <div class="signs">
+          <div><div class="line"></div><div class="small">Klienti</div></div>
+          <div><div class="line"></div><div class="small">Top Mobile</div></div>
+        </div>
+      </div></body></html>`;
+    const win = window.open('', 'PRINT', 'width=840,height=1170');
+    if (!win) return;
+    win.document.write(html); win.document.close(); win.focus();
+    setTimeout(()=>{ win.print(); win.close(); }, 300);
   };
 
   const filtered = useMemo(() => {
