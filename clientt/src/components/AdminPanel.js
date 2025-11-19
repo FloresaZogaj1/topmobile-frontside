@@ -1,26 +1,30 @@
-import React, { useState } from "react";
 import { Box } from "@mui/material";
-import Sidebar from "./components/Sidebar";
-import Dashboard from "./components/Dashboard";
-import Products from "./components/Products";
-import Orders from "./components/Orders";
+import AdminSidebar from "./AdminSidebar";
+import { Outlet } from "react-router-dom";
 
-const TABS = [
-  { key: "dashboard", label: "Dashboard" },
-  { key: "products", label: "Produktet" },
-  { key: "orders", label: "Porositë" },
-];
+const colors = {
+  bg: "#0b0b0b",
+  surface: "#0f0f0f",
+  stroke: "#1f1f1f",
+  shadowInset: "inset 0 0 22px rgba(255,114,0,.08)",
+};
 
 export default function AdminPanel() {
-  const [tab, setTab] = useState("dashboard");
-
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", background: "#fff7ef" }}>
-      <Sidebar tab={tab} setTab={setTab} tabs={TABS} />
-      <Box sx={{ flex: 1, px: 3, py: 2 }}>
-        {tab === "dashboard" && <Dashboard />}
-        {tab === "products" && <Products />}
-        {tab === "orders" && <Orders />}
+    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: colors.bg }}>
+      <AdminSidebar />
+      <Box
+        sx={{
+          flexGrow: 1,
+          p: { xs: 2, md: 4 },
+          bgcolor: colors.surface,
+          minHeight: "100vh",
+          borderLeft: `1px solid ${colors.stroke}`,
+          boxShadow: colors.shadowInset,
+          overflowX: "hidden",
+        }}
+      >
+        <Outlet />
       </Box>
     </Box>
   );

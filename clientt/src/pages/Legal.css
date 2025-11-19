@@ -1,0 +1,175 @@
+:root{
+  --bg:#000000;
+  --card:#0b0b0b;
+  --text:#f4eedc;
+  --muted:#b9b3a0;
+  --accent:#ff7a00;
+  --stroke:#191919;
+  --ring: rgba(255,122,0,.18);
+}
+
+.legal-page{
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 16px 48px;
+  line-height: 1.8;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.legal-title{
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 900;
+  margin: 10px 0 6px;
+  letter-spacing: .01em;
+  color: var(--text);
+  position: relative;
+}
+.legal-title::after{
+  content: "";
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin-top: 10px;
+}
+
+.legal-updated{
+  color: var(--muted);
+  margin: 6px 0 22px;
+}
+
+.legal-lead{
+  font-size: 17px;
+  color: var(--muted);
+  background: linear-gradient(180deg, #0b0b0b, #070707);
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+
+.legal-section{
+  margin-top: 28px;
+  padding-top: 8px;
+  border-top: 1px solid var(--stroke);
+}
+
+.legal-section h2{
+  font-size: clamp(20px, 2.6vw, 24px);
+  font-weight: 800;
+  margin: 8px 0 10px;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: .01em;
+}
+
+.legal-section p{
+  color: var(--text);
+}
+
+.legal-section ul{
+  padding-left: 18px;
+  margin: 10px 0 0;
+  list-style: none;
+}
+.legal-section ul li{
+  position: relative;
+  margin: 8px 0;
+  padding-left: 14px;
+  color: var(--muted);
+}
+.legal-section ul li::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .8em;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.legal-link{
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(255,122,0,.55);
+}
+.legal-link:hover{
+  border-bottom-color: var(--accent);
+}
+
+.legal-note{
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 26px;
+  background: #080808;
+  border: 1px dashed var(--stroke);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+/* Responsivitet i lehtë */
+@media (max-width: 480px){
+  .legal-page{ padding: 0 12px 36px; }
+  .legal-lead{ font-size: 16px; }
+}
+/* ===== FIX: legal page gjithmonë dark ===== */
+
+/* 0) Siguro sfondin e gjithë viewport-it */
+html, body, #root{
+  background: var(--bg) !important;
+}
+
+/* 1) Vetë faqja */
+.legal-page{
+  background: var(--bg) !important;   /* mos le të trashëgojë të bardhën */
+  color: var(--text) !important;
+}
+
+/* 2) Nëse brenda përdor Paper/Container të MUI, detyroje dark */
+.legal-page :where(.MuiPaper-root, .MuiContainer-root){
+  background-color: var(--bg) !important;
+  box-shadow: none !important;
+  border: 1px solid var(--stroke) !important; /* ose hiqe nëse s’e do */
+}
+
+/* 3) Heq çdo “patch” të bardhë që mund të vijë nga elementë fëmijë */
+.legal-page *{
+  background-color: transparent !important;
+}
+
+/* 4) Për seksionin “legal-lead” ruaj dark gradient-in (jo e bardhë) */
+.legal-lead{
+  background: linear-gradient(180deg, #0b0b0b, #070707) !important;
+  border: 1px solid var(--stroke) !important;
+  color: var(--muted) !important;
+}
+
+/* 5) Mobile tweaks: zero surpriza në telefona */
+@media (max-width: 600px){
+  .legal-page{
+    min-height: 100svh;
+    padding: 0 12px 36px;
+  }
+}
+/* ===== AUTH HARD OVERRIDES (vendose në fund të Login.css) ===== */
+
+/* bëj gjithë viewport-in dark, mos le sfond të bardhë nga theme */
+html, body, #root { background: var(--bg) !important; }
+
+/* çdo Paper brenda faqeve auth => all-black */
+.auth-page .MuiPaper-root{
+  background: var(--bg) !important;
+  border: 1px solid var(--stroke) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* nëse ke përdorur Container të MUI brenda, mos e le të sjellë të bardhë */
+.auth-page .MuiContainer-root{
+  background: var(--bg) !important;
+}
+
+/* hiq çdo “patch” të bardhë që mund të trashëgohet nga fëmijët */
+.auth-page * { background-color: transparent; }

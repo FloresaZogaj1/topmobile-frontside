@@ -1,0 +1,489 @@
+:root{
+  --accent:#ff7a00;
+  --accent-hover:#ff6600;
+  --text:#f4eedc;
+  --card:#111111;
+  --muted:#b9b3a0;
+  --ring:rgba(255,122,0,.28);
+}
+
+/* ====== AppBar ====== */
+.tm-appbar{
+  background: rgba(11,11,11,.7) !important;
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) satura/* Hiq çdo glow/oval nga navbar */
+.tm-appbar,
+.MuiAppBar-root.tm-appbar {
+  background: rgba(11,11,11,.92) !important; /* e pastër, pa gradient */
+  box-shadow: 0 16px 60px rgba(0,0,0,.45);   /* vetëm hije e lehtë */
+  overflow: visible;                         /* s'le të pritet glow i brendshëm */
+}
+
+.tm-appbar::before,
+.tm-appbar::after,
+.MuiAppBar-root.tm-appbar::before,
+.MuiAppBar-root.tm-appbar::after {
+  content: none !important;       /* fik pseudo-elementet që krijojnë ovale */
+}
+
+/* ===== MOBILE MENU STYLES ===== */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-menu-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: min(86vw, 320px);
+  height: 100vh;
+  background: var(--card);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu.open .mobile-menu-panel {
+  transform: translateX(0);
+}
+
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #1d1d1d;
+}
+
+.mobile-menu-header .navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.mobile-menu-header .navbar-logo img {
+  height: 40px;
+}
+
+.mobile-menu-close {
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.mobile-menu-close:hover {
+  background: rgba(255, 122, 0, 0.1);
+}
+
+.mobile-menu-nav {
+  padding: 16px 0;
+}
+
+.mobile-nav-item {
+  margin-bottom: 4px;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: var(--text);
+  text-decoration: none;
+  transition: background 0.2s ease;
+  width: 100%;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.mobile-nav-link:hover {
+  background: rgba(255, 122, 0, 0.1);
+}
+
+/* Mobile Dropdown Styles */
+.mobile-dropdown-btn {
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.dropdown-arrow {
+  transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.mobile-submenu {
+  background: rgba(0, 0, 0, 0.3);
+  border-left: 2px solid var(--accent);
+  margin-left: 16px;
+}
+
+.mobile-submenu-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.mobile-submenu-link:hover {
+  color: var(--text);
+  background: rgba(255, 122, 0, 0.05);
+}
+
+.submenu-icon {
+  font-size: 16px;
+}order-bottom:1px solid #191919;
+  box-shadow: 0 16px 60px rgba(0,0,0,.45);
+  color: var(--text) !important;
+}
+.tm-toolbar{
+  min-height: 86px;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+}
+.tm-left,.tm-right{ display:flex; align-items:center; gap:10px; }
+.tm-hamburger{ display:none; }
+
+/* Logo */
+.tm-logo{ height:clamp(68px, 6vw, 110px); object-fit:contain; }
+
+/* ====== CENTER: nav + search ====== */
+.tm-center{
+  display:flex; align-items:center; gap:12px; min-width:0;
+}
+.tm-nav{
+  display:flex; flex-wrap:nowrap; gap:12px;
+  flex:1 1 auto;                  /* nav tkurret i pari */
+  min-width:0;
+}
+.tm-link{
+  color:var(--text) !important;
+  font-weight:800 !important;
+  text-transform:none !important;
+  letter-spacing:.02em !important;
+  font-size:15px !important;
+  padding:8px 10px !important;
+  border-radius:12px !important;
+  white-space:nowrap !important;
+}
+.tm-link:hover{ background:rgba(255,122,0,.08) !important; color:#fff !important; }
+.tm-link.accent{ color:var(--accent) !important; }
+
+/* Dropdowns */
+.dropdown-wrap{ position:relative; display:inline-block; }
+.glass-submenu{
+  position:absolute; top:42px; left:0;
+  background:rgba(17,17,17,.82);
+  border:1px solid #262626;
+  border-radius:16px; padding:12px;
+  display:grid; gap:10px; width:min(92vw,280px);
+  box-shadow:0 24px 80px rgba(0,0,0,.6);
+  backdrop-filter: blur(18px);
+  z-index:3000;
+}
+.menu-glass-link{ text-decoration:none; }
+.menu-glass-item{
+  display:flex; align-items:center; gap:12px;
+  padding:10px 14px; border-radius:14px;
+  background:#121212; border:1px solid #1f1f1f; color:var(--text);
+  transition: .18s;
+}
+.menu-glass-item:hover{ background:#181818; border-color:#2b2b2b; transform:translateY(-1px); }
+.menu-glass-icon{ font-size:20px; }
+.menu-glass-label{ font-size:15px; }
+
+/* Search */
+.tm-search-wrap{
+  margin-left:auto;
+  flex:0 1 clamp(240px, 28vw, 380px);
+  min-width:220px; max-width:100%;
+}
+.tm-search .MuiOutlinedInput-root{
+  height:38px; background:#0f0f0f; border-radius:12px; padding-right:0; color:var(--text);
+}
+.tm-search .MuiInputBase-input{ padding:8px 12px; }
+.tm-search .MuiOutlinedInput-notchedOutline{ border-color:#1f1f1f; }
+.tm-search .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
+  border-color:#2a2a2a; box-shadow:0 0 0 3px var(--ring);
+}
+.tm-search .MuiSvgIcon-root{ color:#c6bda3; font-size:20px; }
+.tm-search-icon{ cursor:pointer; }
+
+/* Right area */
+.tm-cart-btn{
+  width:36px; height:36px; border-radius:999px;
+  background:rgba(255,122,0,.10); color:var(--accent);
+}
+.tm-cart-btn .MuiSvgIcon-root{ font-size:20px; }
+.tm-login-btn{
+  color:#0b0b0b !important; background:var(--accent) !important;
+  border-radius:999px !important; font-weight:900 !important;
+  text-transform:none !important; font-size:15px !important;
+  height:40px !important; padding:0 20px !important;
+  box-shadow:0 10px 28px rgba(255,122,0,.35) !important;
+}
+.tm-login-btn:hover{ background:var(--accent-hover) !important; }
+
+/* ====== RESPONSIVE ====== */
+/* 1) Desktop i gjerë → pak compact dhe ruaj vend për search */
+@media (max-width: 1500px){
+  .tm-nav{ gap:10px; }
+  .tm-link{ padding:7px 9px; font-size:14.6px; }
+  .tm-search-wrap{ flex-basis: clamp(220px, 26vw, 360px); }
+}
+/* 2) Para mobile: fshi vetëm “Rreth Nesh” që të mos ketë overlape */
+@media (max-width: 1400px){
+  .about-link{ display:none !important; }
+}
+/* 3) Tablet/Mobile: fshi nav-in e gjatë, përdor Drawer */
+@media (max-width: 1200px){
+  .tm-nav{ display:none; }
+  .tm-search-wrap{ flex:1 1 auto; min-width:0; }
+  .tm-hamburger{ display:flex; justify-content:flex-end; }
+}
+/* 4) Mobile i vogël: fshi të djathtën, vetëm Hamburger */
+@media (max-width: 900px){
+  .tm-right{ display:none; }
+  .tm-toolbar{ grid-template-columns: auto 1fr auto; }
+}
+/* ==== NAVBAR FIX — PASTE AT THE VERY END ==== */
+
+/* Qendra: nav tkurret i pari, search me gjerësi të kontrolluar */
+.tm-center{ display:flex !important; align-items:center !important; gap:10px !important; min-width:0 !important; }
+.tm-nav{ display:flex !important; flex-wrap:nowrap !important; gap:10px !important; flex:1 1 auto !important; min-width:0 !important; overflow:visible !important; }
+.tm-nav > *{ flex:0 0 auto !important; white-space:nowrap !important; }
+
+/* Search i qëndrueshëm në të djathtë (nuk hyn mbi nav) */
+.tm-search-wrap-center,
+.tm-search-wrap{
+  margin-left:auto !important;
+  flex:0 0 clamp(240px, 28vw, 360px) !important;
+  min-width:240px !important;
+  max-width:100% !important;
+  position:relative !important;
+  z-index:1 !important;
+}
+.tm-search .MuiOutlinedInput-root{ height:36px !important; }
+.tm-search .MuiInputBase-input{ padding:8px 12px !important; }
+
+/* Kompaktim i butonave (dukja e njëjtë, më pak hapësirë) */
+.tm-link-strong, .tm-link{
+  padding:7px 10px !important;
+  font-size:14.6px !important;
+  letter-spacing:.01em !important;
+}
+
+/* “Rreth Nesh”: mos u tkur, mos u pre */
+.about-link{ flex:0 0 auto !important; white-space:nowrap !important; }
+
+/* E djathta: dimensione fikse, të mos shtyjë search-in */
+.tm-right{ display:flex !important; align-items:center !important; gap:10px !important; flex:0 0 auto !important; }
+
+/* Breakpoints të thjeshta dhe të sigurta */
+@media (max-width: 1450px){
+  /* hiqe “Rreth Nesh” para se të afrohet te search */
+  .about-link{ display:none !important; }
+  .tm-search-wrap-center, .tm-search-wrap{ flex-basis: clamp(220px, 30vw, 340px) !important; }
+  .tm-nav{ gap:8px !important; }
+}
+@media (max-width: 1200px){
+  /* kalim në variantin me Drawer */
+  .tm-nav{ display:none !important; }
+  .tm-search-wrap-center, .tm-search-wrap{ flex:1 1 auto !important; min-width:0 !important; }
+}
+@media (max-width: 900px){
+  .tm-right{ display:none !important; }
+}
+/* Gift Cards = si link normal (e bardh) */
+.tm-link { color: var(--text) !important; }
+
+/* Shporta = orange */
+.tm-cart-btn{
+  width:36px; height:36px; border-radius:999px;
+  background:rgba(255,122,0,.10);
+  color:var(--accent) !important;    /* orange ikonë */
+}
+.tm-cart-btn .MuiSvgIcon-root{ font-size:20px !important; }
+
+/* Hamburger menu icon (zgjedh një opsion) */
+.tm-menu-btn{ 
+  color: #fff !important;            /* bardh */
+  /* ose përdor këtë për orange: color: var(--accent) !important; */
+}
+/* ==== FINAL NAVBAR FIX (paste at the very end) ==== */
+
+/* 1) Toolbar me 3 kolona në desktop (hamburger s’mer hapësirë) */
+.tm-toolbar{
+  grid-template-columns: auto 1fr auto !important;
+}
+
+/* 2) Qendra: nav tkurret i pari; search ka gjerësi fikse */
+.tm-center{ display:flex !important; align-items:center !important; gap:10px !important; min-width:0 !important; flex:1 1 auto !important; }
+.tm-nav{ display:flex !important; flex-wrap:nowrap !important; gap:10px !important; flex:1 1 auto !important; min-width:0 !important; overflow:visible !important; }
+.tm-nav > *{ flex:0 0 auto !important; white-space:nowrap !important; }
+
+/* 3) Search i ankoruar djathtas, pa i hyrë nav-it */
+.tm-search-wrap{
+  margin-left:auto !important;
+  flex:0 0 clamp(240px, 28vw, 360px) !important;
+  min-width:240px !important;
+  max-width:100% !important;
+  position:relative !important;
+  z-index:2 !important;             /* mbi border-in e appbar-it */
+}
+.tm-search .MuiOutlinedInput-root{ height:36px !important; }
+.tm-search .MuiInputBase-input{ padding:8px 12px !important; }
+
+/* 4) Dropdown-et bien fiks poshtë butonave dhe s’i prek search */
+.dropdown-wrap{ position:relative !important; }
+.glass-submenu{
+  top: 40px !important; left: 0 !important;
+  z-index: 3000 !important;
+}
+
+/* 5) Kompaktim i butonave (pa ndryshuar look) */
+.tm-link{ padding:7px 10px !important; font-size:14.6px !important; letter-spacing:.01em !important; }
+
+/* 6) “Rreth Nesh” hiqet para se të afrohet te search */
+@media (max-width: 1450px){
+  .about-link{ display:none !important; }
+  .tm-nav{ gap:8px !important; }
+  .tm-search-wrap{ flex-basis: clamp(220px, 30vw, 340px) !important; }
+}
+
+/* 7) Tablet/mobile: nav → Drawer; search zgjatet */
+@media (max-width: 1200px){
+  .tm-nav{ display:none !important; }
+  .tm-search-wrap{ flex:1 1 auto !important; min-width:0 !important; }
+}
+
+/* 8) Mobile i vogël: fshi të djathtën, mbaj hamburger */
+@media (max-width: 900px){
+  .tm-right{ display:none !important; }
+}
+
+/* 9) Ngjyrat e kërkuara: Gift Cards bardh, shporta portokalli */
+.tm-link{ color: var(--text) !important; }         /* p.sh. Gift Cards */
+.tm-cart-btn{ background:rgba(255,122,0,.10); color:var(--accent) !important; }
+.tm-cart-btn .MuiSvgIcon-root{ font-size:20px !important; }
+.tm-menu-btn{ color:#fff !important; }             /* hamburger bardh */
+/* ===== LAPTOP FIX (1366px) ===== */
+
+/* Toolbar: 3 kolona, qendra mund të tkurret realisht */
+.tm-toolbar{ grid-template-columns: auto 1fr auto !important; }
+
+/* Qendra: nav tkurret i pari, min-width:0 që të lejojë tkurrjen */
+.tm-center{ display:flex !important; align-items:center !important; gap:8px !important; min-width:0 !important; }
+.tm-nav{ display:flex !important; flex:1 1 auto !important; min-width:0 !important; gap:8px !important; overflow:hidden !important; }
+.tm-nav > *{ flex:0 0 auto !important; white-space:nowrap !important; }
+
+/* Search të MOS e shtyjë nav-in */
+.tm-search-wrap{
+  margin-left:auto !important;
+  flex:0 0 clamp(200px, 24vw, 320px) !important; /* më e vogël në laptop */
+  min-width:200px !important;
+  max-width:100% !important;
+  z-index:2 !important;
+}
+.tm-search .MuiOutlinedInput-root{ height:34px !important; }
+.tm-search .MuiInputBase-input{ padding:7px 10px !important; }
+
+/* Butonat më kompakt në laptop */
+.tm-link{ padding:6px 9px !important; font-size:14.3px !important; letter-spacing:.01em !important; }
+
+/* Hiq “Rreth Nesh” dhe shtrëngo hapësirat rreth 1366px */
+@media (max-width: 1400px){
+  .about-link{ display:none !important; }
+}
+@media (max-width: 1320px){
+  .tm-nav{ gap:6px !important; }
+  .tm-link{ padding:6px 8px !important; font-size:14px !important; }
+  .tm-search-wrap{ flex-basis: clamp(180px, 22vw, 280px) !important; }
+}
+
+/* Nën 1180–1200: kalim në Drawer (për siguri në laptop më të ngushtë) */
+@media (max-width: 1200px){
+  .tm-nav{ display:none !important; }
+  .tm-search-wrap{ flex:1 1 auto !important; min-width:0 !important; }
+}
+
+/* Dropdown-et gjithmonë poshtë butonit, mbi search */
+.dropdown-wrap{ position:relative !important; }
+.glass-submenu{ top:40px !important; left:0 !important; z-index:3000 !important; }
+
+/* Ngjyrat sipas kërkesës */
+.tm-link{ color:var(--text) !important; }               /* p.sh. Gift Cards bardh */
+.tm-cart-btn{ background:rgba(255,122,0,.10); color:var(--accent) !important; }
+.tm-menu-btn{ color:#fff !important; }
+
+/* ZËVENDËSO këtë bllok */
+@media (max-width: 1450px){
+  .about-link{ display:none !important; }
+  .tm-nav{ gap:8px !important; }
+  .tm-search-wrap{ flex-basis: clamp(220px, 30vw, 340px) !important; }
+}
+
+/* ME këtë: */
+@media (max-width: 1280px){
+  .about-link{ display:none !important; }  /* fshihet vetëm nën 1280 */
+  .tm-nav{ gap:8px !important; }
+  .tm-search-wrap{ flex-basis: clamp(200px, 26vw, 320px) !important; }
+}
+/* ==== FIX: dropdown-et të shfaqen në desktop ==== */
+.tm-nav{
+  overflow: visible !important;   /* ishte hidden dikund më lart */
+}
+
+.dropdown-wrap{
+  position: relative !important;  /* ankorim për submenu */
+}
+
+.glass-submenu{
+  top: 40px !important;
+  left: 0 !important;
+  z-index: 4000 !important;       /* mbi search-in */
+}
+/* Hiq çdo glow/oval nga navbar */
+.tm-appbar,
+.MuiAppBar-root.tm-appbar {
+  background: rgba(11,11,11,.92) !important; /* e pastër, pa gradient */
+  box-shadow: 0 16px 60px rgba(0,0,0,.45);   /* vetëm hije e lehtë */
+  overflow: visible;                         /* s’le të pritet glow i brendshëm */
+}
+
+.tm-appbar::before,
+.tm-appbar::after,
+.MuiAppBar-root.tm-appbar::before,
+.MuiAppBar-root.tm-appbar::after {
+  content: none !important;       /* fik pseudo-elementet që krijojnë ovale */
+}

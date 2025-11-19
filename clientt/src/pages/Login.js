@@ -1,136 +1,229 @@
-import axios from "axios";
-import { useState } from "react";
-import { Box, Button, Paper, TextField, Typography, InputAdornment, IconButton } from "@mui/material";
-import LockIcon from "@mui/icons-material/Lock";
-import PersonIcon from "@mui/icons-material/Person";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import React, { useState, useContext, useEffect } from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Alert,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
+import { AuthContext } from "../AuthContext";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import "./Login.css";
 
-export default function Login({ onLogin }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+const API_URL = process.env.REACT_APP_API_URL || "https://api.topmobile.store";
+
+// Funksion ndihmës që bën fallback nëse /api/auth/login kthen 404
+async function loginRequest(body) {
+  // provo /api/auth/login
+  let res = await fetch(`${API_URL}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  // nëse nuk ekziston (404), provo /auth/login
+  if (res.status === 404) {
+    res = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  }
+
+  return res;
+}
+
+function Login() {
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [message, setMessage] = useState({ type: "", text: "" });
   const [showPwd, setShowPwd] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { login, user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || null;
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    try {
-      const res = await axios.post("https://topmobile-backside-production.up.railway.app/api/login", {
-        username,
-        password,
-      });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.role);
-      onLogin && onLogin();
-    } catch (err) {
-      setError("Gabim në login! Kontrollo të dhënat.");
+  useEffect(() => {
+    const existing =
+      localStorage.getItem("tm_token") || localStorage.getItem("token");
+    if (existing || user) {
+      navigate("/", { replace: true });
     }
-    setLoading(false);
+  }, [user, navigate]);
+
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage({ type: "", text: "" });
+
+    try {
+      const res = await loginRequest(form);
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.token && data.user) {
+        localStorage.setItem("tm_token", data.token);
+        localStorage.setItem("token", data.token);
+        login(data.token, data.user);
+
+        if (from) {
+          const isAdminOnly =
+            from.startsWith("/admin") || from.startsWith("/warranty");
+          if (isAdminOnly) {
+            if (data.user.role === "admin")
+              return navigate(from, { replace: true });
+            return navigate("/", { replace: true });
+          }
+          return navigate(from, { replace: true });
+        }
+
+        if (data.user.role === "admin") return navigate("/admin", { replace: true });
+        return navigate("/", { replace: true });
+      }
+
+      setMessage({ type: "error", text: data.message || "Gabim në login" });
+    } catch {
+      setMessage({ type: "error", text: "Gabim në lidhje me serverin!" });
+    }
+  };
+
+  const loginWithGoogle = () => {
+    window.location.href = `${API_URL}/api/auth/google`;
+  };
+
+  const disabled = !form.email.trim() || !form.password.trim();
+
+  const controlSx = {
+    "& .MuiInputBase-root": {
+      background: "var(--chip)",
+      color: "var(--text)",
+      borderRadius: "14px",
+      border: "1px solid var(--chip-stroke)",
+    },
+    "& .MuiOutlinedInput-notchedOutline": { borderColor: "transparent" },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "var(--chip-stroke)",
+    },
+    "& .MuiInputLabel-root": { color: "var(--muted)" },
+    "& .MuiSvgIcon-root": { color: "var(--muted)" },
+    "& .MuiInputBase-input::placeholder": { color: "#8d8d8d" },
+    "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "var(--accent)",
+      boxShadow: "0 0 0 4px rgba(255,128,0,.12)",
+    },
   };
 
   return (
-    <Box sx={{
-      minHeight: "100vh",
-      background: "linear-gradient(115deg,#fff,#fff7ef 80%)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }}>
-      <Paper elevation={4} sx={{
-        p: { xs: 3, sm: 5 },
-        maxWidth: 400,
-        width: "100%",
-        borderRadius: 5,
-        boxShadow: "0 6px 28px #ff800018"
-      }}>
-        <Typography
-          variant="h4"
-          align="center"
-          sx={{
-            fontWeight: 700,
-            letterSpacing: 1,
-            mb: 3,
-            color: "#ff8000"
-          }}
-        >
-          Kyçu në Top Mobile
+    <Box className="auth-page">
+      <Paper elevation={0} className="auth-card">
+        <Typography variant="h4" className="brand" component="div">
+          <span>topmobile</span>
         </Typography>
-        <form onSubmit={handleLogin} style={{ width: "100%" }}>
+
+        <Typography
+          variant="subtitle1"
+          align="center"
+          sx={{ color: "var(--muted)", mb: 2 }}
+        >
+          Kyçu në llogarinë tënde
+        </Typography>
+
+        {message.text && (
+          <Alert
+            severity={message.type === "success" ? "success" : "error"}
+            sx={{ mb: 2, borderRadius: 2 }}
+          >
+            {message.text}
+          </Alert>
+        )}
+
+        <Button
+          fullWidth
+          variant="outlined"
+          className="btn-chip"
+          sx={{ mb: 1.2, textTransform: "none" }}
+          startIcon={
+            <img
+              src="https://img.icons8.com/color/48/000000/google-logo.png"
+              width="22"
+              height="22"
+              alt="google"
+              style={{ borderRadius: 2 }}
+            />
+          }
+          onClick={loginWithGoogle}
+        >
+          Identifikohu me Google
+        </Button>
+
+        <Box component="form" onSubmit={handleSubmit} noValidate>
           <TextField
+            label="Adresa e emailit"
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            required
             fullWidth
-            label="Username"
-            variant="outlined"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            sx={{ mb: 2, background: "#fff" }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <PersonIcon color="warning" />
-                </InputAdornment>
-              ),
-            }}
-            autoFocus
+            margin="dense"
+            autoComplete="email"
+            sx={controlSx}
           />
           <TextField
-            fullWidth
-            label="Password"
+            label="Fjalëkalimi"
+            name="password"
             type={showPwd ? "text" : "password"}
-            variant="outlined"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            sx={{ mb: 3, background: "#fff" }}
+            value={form.password}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="dense"
+            autoComplete="current-password"
+            sx={controlSx}
             InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockIcon color="warning" />
-                </InputAdornment>
-              ),
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => setShowPwd((s) => !s)}
+                    onClick={() => setShowPwd((v) => !v)}
                     edge="end"
-                    tabIndex={-1}
+                    aria-label={
+                      showPwd ? "Fshihe fjalëkalimin" : "Shfaq fjalëkalimin"
+                    }
+                    sx={{ color: "var(--muted)" }}
                   >
-                    {showPwd ? <VisibilityOff /> : <Visibility />}
+                    {showPwd ? "🙈" : "👁️"}
                   </IconButton>
                 </InputAdornment>
               ),
             }}
           />
+
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            color="warning"
-            size="large"
-            disabled={loading}
-            sx={{
-              fontWeight: 700,
-              borderRadius: 2,
-              textTransform: "none",
-              fontSize: 17,
-              py: 1.3,
-              boxShadow: "0 2px 12px #ff800038",
-              mb: 1
-            }}
+            disabled={disabled}
+            className="btn-accent"
+            sx={{ mt: 2 }}
           >
-            {loading ? "Duke u kyçur..." : "Kyçu"}
+            Kyçu
           </Button>
-          {error && (
-            <Typography color="error" sx={{ mt: 1, textAlign: "center" }}>
-              {error}
-            </Typography>
-          )}
-        </form>
-        <Typography sx={{ color: "#50577a", mt: 3, textAlign: "center", fontSize: 15 }}>
-          Nuk ke llogari? <span style={{ color: "#ff8000", fontWeight: 600, cursor: "pointer" }}>Na kontakto për të krijuar një llogari</span>
-        </Typography>
+        </Box>
+
+        <Box mt={2} textAlign="center">
+          <Typography fontSize={14} sx={{ color: "var(--muted)" }}>
+            Nuk ke llogari?{" "}
+            <Link to="/register" className="accent-link">
+              Regjistrohu
+            </Link>
+          </Typography>
+        </Box>
       </Paper>
     </Box>
   );
 }
+
+export default Login;

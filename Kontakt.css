@@ -1,0 +1,229 @@
+.contact-section {
+  width: 100vw;
+  background: #fff;
+  min-height: 650px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 44px 0 60px 0;
+  box-sizing: border-box;
+}
+
+.contact-content {
+  max-width: 700px;
+  margin: 0 auto;
+  width: 97vw;
+  padding: 44px 20px 36px 20px;
+  border-radius: 18px;
+  background: #faf8ff;
+  box-shadow: 0 2px 34px #9d00ff0e;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.contact-content h1 {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #1b0f2b;
+  margin-bottom: 16px;
+}
+
+.contact-content p {
+  font-size: 1.09rem;
+  color: #5a326c;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.contact-form {
+  margin-bottom: 32px;
+}
+
+.contact-row {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.contact-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+}
+
+.contact-field label {
+  font-weight: 700;
+  font-size: .99rem;
+  color: #9D00FF;
+  margin-bottom: 5px;
+  letter-spacing: .2px;
+}
+
+.contact-field input,
+.contact-field select,
+.contact-field textarea {
+  border: none;
+  border-bottom: 2.2px solid #9D00FF22;
+  background: transparent;
+  font-size: 1.06rem;
+  padding: 10px 4px 8px 4px;
+  margin-bottom: 0;
+  outline: none;
+  color: #2a1138;
+  border-radius: 4px 4px 0 0;
+  transition: border-color .15s;
+  box-sizing: border-box;
+}
+
+.contact-field input:focus,
+.contact-field select:focus,
+.contact-field textarea:focus {
+  border-bottom: 2.2px solid #9D00FF;
+}
+
+.contact-field select {
+  font-size: 1.05rem;
+  background: #f2eaff;
+  color: #5a326c;
+  border-radius: 9px;
+  margin-bottom: 2px;
+}
+
+.contact-field textarea {
+  min-height: 44px;
+  background: #f2eaff;
+  resize: vertical;
+}
+
+.contact-field.wide {
+  flex: 2;
+}
+
+.contact-btn {
+  background: #9D00FF;
+  color: #fff;
+  font-weight: 800;
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.1rem;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-top: 14px;
+  box-shadow: 0 2px 18px #9d00ff19;
+  transition: background .18s;
+}
+
+.contact-btn:hover { background: #ef466f; }
+
+.contact-success {
+  margin-top: 22px;
+  color: #33b308;
+  font-size: 1.14rem;
+  font-weight: 700;
+}
+
+.contact-extra {
+  margin-top: 44px;
+  background: #f7f2fa;
+  padding: 22px 18px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px #9d00ff0a;
+}
+
+.contact-extra h4 {
+  margin: 0 0 8px 0;
+  color: #9D00FF;
+  font-size: 1.13rem;
+  font-weight: 800;
+}
+
+.contact-map-link {
+  color: #fff;
+  background: #9D00FF;
+  font-weight: 700;
+  padding: 7px 17px;
+  border-radius: 9px;
+  margin-top: 10px;
+  display: inline-block;
+  text-decoration: none;
+  margin-bottom: 3px;
+  box-shadow: 0 2px 10px #9d00ff18;
+  transition: background .16s;
+}
+.contact-map-link:hover { background: #ef466f; }
+
+/* ----------- TABLET ----------- */
+@media (max-width: 700px) {
+  .contact-section {
+    padding: 22px 0 30px 0;
+    min-height: 430px;
+  }
+  .contact-content {
+    max-width: 98vw;
+    padding: 24px 7vw 20px 7vw;
+    border-radius: 12px;
+  }
+  .contact-content h1 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  .contact-row {
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 8px;
+  }
+  .contact-field {
+    min-width: 0;
+    margin-bottom: 12px;
+  }
+  .contact-btn {
+    font-size: 1rem;
+    padding: 12px 0;
+    width: 100%;
+    margin-top: 4px;
+    border-radius: 9px;
+  }
+  .contact-extra {
+    margin-top: 22px;
+    padding: 16px 7vw;
+  }
+}
+
+/* ----------- MOBILE (very small screens) ----------- */
+@media (max-width: 520px) {
+  .contact-content {
+    padding: 15px 3vw 12px 3vw;
+  }
+  .contact-extra {
+    padding: 11px 3vw;
+    font-size: 0.97rem;
+  }
+  .contact-content h1 {
+    font-size: 1.1rem;
+  }
+  .contact-field input,
+  .contact-field select,
+  .contact-field textarea {
+    font-size: 0.98rem;
+    padding: 7px 2px 6px 2px;
+  }
+}
+
+@media (max-width: 400px) {
+  .contact-content {
+    padding: 7px 1vw 8px 1vw;
+    border-radius: 7px;
+  }
+  .contact-extra {
+    padding: 6px 1vw;
+    border-radius: 6px;
+    font-size: 0.91rem;
+  }
+  .contact-btn {
+    font-size: 0.98rem;
+    padding: 9px 0;
+    border-radius: 6px;
+  }
+}

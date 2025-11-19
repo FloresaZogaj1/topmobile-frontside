@@ -1,173 +1,207 @@
-import React from 'react';
-import { Box, Container, Typography, Grid, Card, CardContent, CardMedia, Button } from '@mui/material';
-import { useCart } from '../CartContext'; // ndrysho path sipas strukturës tënde
+// /pages/PjesePlaystation.jsx
+import React from "react";
+import { Box, Container, Typography, Grid, Card, CardContent, CardMedia } from "@mui/material";
+import "./ProductsIphone.css";     // tema dark + utilitët
+import "./PjeseTelefonaSpecific.css"; // Styling specifik 3x3 grid
+
+import SEO from "../seo/SEO";
+
+
+import pjes1 from "../assets/88768-OIFDA2-436-removebg-preview.png";
+import pjes2 from "../assets/49191-removebg-preview.png";
+import pjes3 from "../assets/circuit-board-close-up-with-different-components-removebg-preview.png";
+import pjes4 from "../assets/top-view-virtual-reality-headset-white-headphones-removebg-preview.png";
+import pjes5 from "../assets/7082609-removebg-preview.png";
+import pjes6 from "../assets/high-angle-controller-with-vr-glasses-removebg-preview.png";
 
 const psParts = [
   {
-    title: 'Gamepad DualShock/DualSense',
-    image: 'https://img.freepik.com/free-photo/activity-control-cable-relaxation-station_1172-483.jpg?uid=R144109746&ga=GA1.1.2116894046.1746009338&semt=ais_hybrid&w=740',
-    desc: 'Kontrollorë origjinalë dhe të certifikuar për PS4 & PS5.',
-    price: 49
+    title: "Gamepad DualShock/DualSense",
+    image: pjes1,
+    desc: "Kontrollorë origjinalë dhe të certifikuar për PS4 & PS5.",
   },
   {
-    title: 'Ventilator për PS4/PS5',
-    image: 'https://img.freepik.com/free-vector/realistic-ventilation-template_1284-45259.jpg?uid=R144109746&ga=GA1.1.2116894046.1746009338&semt=ais_hybrid&w=740',
-    desc: 'Zëvendësim për ftohësin e brendshëm për ruajtje performance.',
-    price: 22
+    title: "Ventilator për PS4/PS5",
+    image: pjes2,
+    desc: "Zëvendësim për ftohësin e brendshëm për ruajtje performance.",
   },
   {
-    title: 'Porta HDMI',
-    image: 'https://img.freepik.com/free-photo/usb-charging-gadgets-blurred-background-room-close-up-concept-technology-everyday-life_169016-15480.jpg?uid=R144109746&ga=GA1.1.2116894046.1746009338&semt=ais_hybrid&w=740',
-    desc: 'Riparim ose ndërrim i portës HDMI me pajisje profesionale.',
-    price: 14
+    title: "Porta HDMI",
+    image: pjes3,
+    desc: "Riparim ose ndërrim i portës HDMI me pajisje profesionale.",
   },
   {
-    title: 'Kabllo dhe aksesorë',
-    image: 'https://img.freepik.com/free-vector/broken-usb-cables-wires-illustration_74855-18228.jpg?uid=R144109746&ga=GA1.1.2116894046.1746009338&semt=ais_hybrid&w=740',
-    desc: 'Kabllo karikimi, kabllo HDMI, USB-C dhe më shumë.',
-    price: 9
+    title: "Kabllo dhe aksesorë",
+    image: pjes4,
+    desc: "Kabllo karikimi, kabllo HDMI, USB-C dhe më shumë.",
   },
   {
-    title: 'SSD 1TB për PS',
-    image: 'https://img.freepik.com/free-vector/gradient-hard-drive-illustration_23-2149377019.jpg?uid=R144109746&ga=GA1.1.2116894046.1746009338&semt=ais_hybrid&w=740',
-    desc: 'SSD me shpejtësi të lartë leximi dhe shkkrimi për ruajtje të qëndrueshme.',
-    price: 69
+    title: "SSD 1TB për PS",
+    image: pjes5,
+    desc: "SSD me shpejtësi të lartë leximi dhe shkkrimi për ruajtje të qëndrueshme.",
   },
   {
-    title: 'Modul WiFi për PS',
-    image: 'https://img.freepik.com/free-photo/high-angle-wi-fi-router-with-vacuum-cleaner_23-2148779238.jpg?uid=R144109746&ga=GA1.1.2116894046.1746009338&semt=ais_hybrid&w=740',
-    desc: 'Modul WiFi me lidhje të qëndrueshme dhe shpejtësi të lartë për lojë pa ndërprerje.',
-    price: 18
-  }
+    title: "Modul WiFi për PS",
+    image: pjes6,
+    desc: "Modul WiFi me lidhje të qëndrueshme dhe shpejtësi të lartë për lojë pa ndërprerje.",
+  },
 ];
 
 const PjesePlaystation = () => {
-  const { addToCart } = useCart();
+  // JSON-LD: Breadcrumbs (Home > Shërbimet > Pjesë për PlayStation)
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://topmobile.store/" },
+      { "@type": "ListItem", position: 2, name: "Shërbimet", item: "https://topmobile.store/sherbimet" },
+      { "@type": "ListItem", position: 3, name: "Pjesë për PlayStation", item: "https://topmobile.store/sherbimet/playstation" },
+    ],
+  };
+
+  // JSON-LD: Service + OfferCatalog
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Pjesë për PlayStation",
+    serviceType: "Pjesë zëvendësuese dhe instalim për PlayStation",
+    areaServed: "Kosovo",
+    provider: {
+      "@type": "Organization",
+      name: "Top Mobile",
+      url: "https://topmobile.store/",
+      telephone: "+38345407222",
+      address: { "@type": "PostalAddress", addressLocality: "Prishtinë", addressCountry: "XK" },
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Katalogu i pjesëve për PlayStation",
+      itemListElement: psParts.map((p) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Product",
+          name: p.title,
+          description: p.desc,
+          image: p.image,
+          category: "GameConsolePart",
+          brand: "Top Mobile",
+        },
+      })),
+    },
+  };
 
   return (
-    <Box sx={{ bgcolor: '#f9fafd', minHeight: '100vh', py: { xs: 5, md: 8 } }}>
+    <Box className="iphone-page phone-parts-page" sx={{ bgcolor: "var(--bg)", minHeight: "100vh", py: { xs: 5, md: 8 } }}>
+      {/* SEO */}
+      <SEO
+        title="Pjesë për PlayStation"
+        description="Pjesë dhe instalim profesional për PlayStation: gamepad, ventilatorë, porta HDMI, kabllo & aksesorë, SSD, module WiFi."
+        url="https://topmobile.store/sherbimet/playstation"
+        image="https://topmobile.store/og-image.jpg"
+      />
+      <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+      <script type="application/ld+json">{JSON.stringify(serviceJsonLd)}</script>
+
       <Container maxWidth="lg">
         <Typography
+          component="h1"
           variant="h4"
-          align="center"
-          fontWeight={800}
-          sx={{
-            color: '#023047',
-            letterSpacing: 0.5,
-            mb: 4,
-            fontSize: { xs: 24, md: 34 }
-          }}
+          fontWeight={900}
+          className="iphone-title"
+          sx={{ color: "var(--text)", textAlign: "center", mb: 4, fontSize: { xs: 24, md: 34 } }}
         >
           Pjesë për PlayStation
         </Typography>
 
-        <Grid container spacing={3} justifyContent="center">
+        <div className="products-grid">
           {psParts.map((item, i) => (
-            <Grid item xs={12} sm={6} md={4} key={i}>
-              <Card
-                sx={{
-                  borderRadius: 3,
-                  boxShadow: '0 3px 18px #0230470b',
-                  bgcolor: '#fff',
-                  maxWidth: 330,
-                  minHeight: 330,
-                  mx: 'auto',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  p: 0,
-                  transition: 'box-shadow .13s, transform .13s',
-                  '&:hover': {
-                    boxShadow: '0 10px 30px #ff800018',
-                    transform: 'translateY(-3px) scale(1.01)'
-                  }
-                }}
-                elevation={0}
-              >
-                <CardMedia
-                  component="img"
-                  image={item.image}
+            <div key={i} className="modern-product-card">
+              {/* Service Badge */}
+              <div className="product-new-badge">SHËRBIM</div>
+              
+              {/* Product Image */}
+              <div className="modern-product-image">
+                <img 
+                  src={item.image} 
                   alt={item.title}
-                  sx={{
-                    width: '100%',
-                    height: 130,
-                    objectFit: 'cover',
-                    borderRadius: '14px 14px 0 0'
-                  }}
+                  loading="lazy"
+                  onError={(e) => (e.currentTarget.src = "https://topmobile.store/og-image.jpg")}
                 />
-                <CardContent
-                  sx={{
-                    flexGrow: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    width: '100%',
-                    px: 2,
-                    py: 1.5
+              </div>
+              
+              {/* Product Info */}
+              <div className="modern-product-info">
+                <div className="product-category-label">PlayStation</div>
+                
+                <Typography className="modern-product-title" variant="h6">
+                  {item.title}
+                </Typography>
+                
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    color: "var(--text-secondary)", 
+                    mb: 2,
+                    lineHeight: 1.5,
+                    fontSize: "14px"
                   }}
                 >
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight={700}
-                    sx={{ color: '#023047', mb: 0.5, fontSize: 16 }}
-                    noWrap
+                  {item.desc}
+                </Typography>
+                
+                <div className="modern-product-buttons">
+                  <button 
+                    className="btn-buy-now"
+                    onClick={() => window.open('tel:+38345407222', '_self')}
                   >
-                    {item.title}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: '#50577a',
-                      mb: 1,
-                      lineHeight: 1.4,
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                      fontSize: 14,
-                      minHeight: 38
-                    }}
-                  >
-                    {item.desc}
-                  </Typography>
-                  <Typography
-                    variant="subtitle2"
-                    sx={{
-                      color: '#ff8000',
-                      fontWeight: 700,
-                      fontSize: 16,
-                      mt: 1
-                    }}
-                  >
-                    {item.price}€
-                  </Typography>
-                </CardContent>
-                <Box sx={{ width: '100%', px: 2, pb: 2 }}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      bgcolor: '#023047',
-                      color: '#fff',
-                      fontWeight: 700,
-                      borderRadius: 2,
-                      fontSize: 14,
-                      py: 1,
-                      textTransform: 'none',
-                      transition: '.13s',
-                      '&:hover': { bgcolor: '#ff8000', color: '#fff' }
-                    }}
-                    onClick={() => addToCart(item)}
-                  >
-                    Shto në Shportë
-                  </Button>
-                </Box>
-              </Card>
-            </Grid>
+                    <span>🎮</span>
+                    Kontakto për çmim
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
-        </Grid>
+        </div>
+
+        {/* Service Info Section */}
+        <Box sx={{ mt: 6, p: 4, background: "var(--bg-card)", borderRadius: "var(--radius-2xl)", border: "1px solid var(--border-subtle)" }}>
+          <Typography 
+            variant="h5" 
+            fontWeight="bold"
+            sx={{ color: "var(--text-primary)", mb: 2, textAlign: "center" }}
+          >
+            🎮 Shërbim Profesional PlayStation
+          </Typography>
+          
+          <Grid container spacing={3} sx={{ mt: 2 }}>
+            <Grid item xs={12} md={4}>
+              <Box sx={{ textAlign: "center" }}>
+                <Typography variant="h6" sx={{ color: "var(--primary)", mb: 1 }}>⚡ Riparim i shpejtë</Typography>
+                <Typography sx={{ color: "var(--text-secondary)", fontSize: "14px" }}>
+                  Riparime PlayStation brenda 48 orëve
+                </Typography>
+              </Box>
+            </Grid>
+            
+            <Grid item xs={12} md={4}>
+              <Box sx={{ textAlign: "center" }}>
+                <Typography variant="h6" sx={{ color: "var(--primary)", mb: 1 }}>✅ Garanci 6 muaj</Typography>
+                <Typography sx={{ color: "var(--text-secondary)", fontSize: "14px" }}>
+                  Të gjitha pjesët dhe riparime me garanci të plotë
+                </Typography>
+              </Box>
+            </Grid>
+            
+            <Grid item xs={12} md={4}>
+              <Box sx={{ textAlign: "center" }}>
+                <Typography variant="h6" sx={{ color: "var(--primary)", mb: 1 }}>🎯 Pjesë origjinale</Typography>
+                <Typography sx={{ color: "var(--text-secondary)", fontSize: "14px" }}>
+                  Vetëm pjesë të certifikuara dhe të cilësisë së lartë
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
       </Container>
     </Box>
   );

@@ -9,7 +9,7 @@ import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 
 const sherbimet = [
   {
-    title: "Mirëmbajtja me Kontratë",
+    title: "Mirëmbajtja me kontratë",
     description: "Paketa të personalizuara për mirëmbajtjen e pajisjeve tuaja.",
     icon: <ConstructionIcon fontSize="large" sx={{ color: '#ff8000' }} />,
     link: "/sherbimet/mirembajtja"

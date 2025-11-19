@@ -1,46 +1,141 @@
+/* KONTEJNER I FAQEVE */
 .container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 30px;
+  max-width: 100%;
+  width: min(100%, 800px);
+  margin: 24px auto;
+  padding: 20px;
   background: #f6f6f6;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
+@media (min-width: 600px) {
+  .container { margin: 32px auto; padding: 24px; }
+}
+@media (min-width: 900px) {
+  .container { margin: 40px auto; padding: 30px; }
+}
+
+/* HEADER */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;             /* ✅ që të mos dalë jashtë ekranit */
 }
 
 .logout-btn {
   background: #e74c3c;
   color: white;
   border: none;
-  border-radius: 4px;
-  padding: 7px 16px;
+  border-radius: 6px;
+  padding: 8px 16px;
   cursor: pointer;
+  font-weight: 600;
 }
 
+/* FORMA TË VOGLA (LOGIN/REGISTER, etj.) */
 .form {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 320px;
-  margin: 40px auto;
+  max-width: 420px;            /* ✅ pak më e gjerë, por e kufizuar */
+  width: 100%;
+  margin: 24px auto;
   background: white;
-  padding: 25px 20px;
-  border-radius: 8px;
+  padding: 20px 16px;
+  border-radius: 10px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.05);
 }
 
-.form input, .form button {
+@media (min-width: 600px) {
+  .form { padding: 24px 20px; margin: 32px auto; }
+}
+
+.form input,
+.form button {
   font-size: 16px;
-  padding: 7px 10px;
+  padding: 10px 12px;
 }
 
 .form .error {
   color: #e74c3c;
   font-size: 14px;
   margin: 0;
+}
+
+/* LEGAL PAGES */
+.legal-page h1 { font-size: clamp(1.4rem, 4vw, 2rem); margin-bottom: 8px; }
+.legal-page h2 { font-size: clamp(1.05rem, 2.8vw, 1.25rem); margin-top: 24px; }
+.legal-page ul { padding-left: 18px; }
+.legal-page ol { padding-left: 20px; }
+.legal-page a { text-decoration: underline; }
+
+/* ✅ KLASE E DOBISHME KUNDËR OVERFLOW */
+.avoid-overflow { min-width: 0; overflow: hidden; }
+
+/* ===== Submenu e Produkteve (desktop) ===== */
+.glass-submenu.products-dropdown-menu {
+  --bg: rgba(248, 139, 50, 0.98);     /* prapavijë pothuajse solide */
+  --border: rgba(0, 0, 0, 0.10);
+  --shadow: 0 14px 40px rgba(0,0,0,0.20);
+
+  min-width: 360px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(150px, 1fr));
+  gap: 10px;
+
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  backdrop-filter: saturate(160%) blur(4px);
+  z-index: 9999;                       /* mbi çdo gjë */
+}
+
+/* Linku i kutive */
+.menu-glass-link {
+  text-decoration: none;
+}
+
+/* Kutitë e opsioneve (iPhone, Samsung, …) */
+.menu-glass-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+
+  background: #fff;                    /* e bardhë e pastër për kontrast */
+  border: 1px solid rgba(0,0,0,0.06);
+  color: #111;                         /* tekst i errët që lexohet lehtë */
+  font-weight: 600;
+  transition: 160ms ease;
+}
+
+.menu-glass-item:hover {
+  background: #f1a129;                 /* highlight i qartë */
+  border-color: rgba(0,0,0,0.12);
+  transform: translateY(-1px);
+}
+
+/* Ikonat dhe tekstet brenda */
+.menu-glass-icon { font-size: 22px; line-height: 1; }
+.menu-glass-label { font-size: 15px; }
+
+/* Opsionale: në tema të errëta */
+html.dark .glass-submenu.products-dropdown-menu {
+  --bg: rgba(238, 149, 47, 0.98);
+  --border: rgba(255,255,255,0.08);
+}
+html.dark .menu-glass-item {
+  background: #12161a;
+  border-color: rgba(255,255,255,0.06);
+  color: #f2f4f8;
+}
+html.dark .menu-glass-item:hover {
+  background: #f0a534;
+  border-color: rgba(255,255,255,0.12);
 }

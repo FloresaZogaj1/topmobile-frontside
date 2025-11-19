@@ -1,157 +1,151 @@
-import { useState } from "react";
-import { Box, Button, Paper, TextField, Typography, InputAdornment, IconButton, Alert, CircularProgress } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import LockIcon from "@mui/icons-material/Lock";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import React, { useState, useContext, useEffect } from "react";
+import {
+  Box, Button, TextField, Typography, Paper, Alert,
+  InputAdornment, IconButton
+} from "@mui/material";
+import { AuthContext } from "../AuthContext";
+import { useNavigate, Link } from "react-router-dom";
+import "./Register.css";
 
-export default function Register({ setLoggedIn }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPwd, setShowPwd] = useState(false);
+// ⬇️ njëjtë si te Login – përdor prod si fallback
+const API_URL =
+  (import.meta && import.meta.env && import.meta.env.VITE_API_URL) ||
+  process.env.REACT_APP_API_URL ||
+  "https://api.topmobile.store";
+
+// ⬇️ helper si te Login: provo /api/auth/register dhe pastaj /auth/register
+async function registerRequest(body) {
+  let res = await fetch(`${API_URL}/api/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    // ⛔️ MOS përdor credentials këtu – s’po vendosim cookie
+    body: JSON.stringify(body),
+  });
+
+  if (res.status === 404) {
+    res = await fetch(`${API_URL}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  }
+
+  return res;
+}
+
+function Register() {
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [message, setMessage] = useState({ type: "", text: "" });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+    setMessage({ type: "", text: "" });
     setLoading(true);
     try {
-      const res = await fetch("https://topmobile-backside-production.up.railway.app/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await res.json();
+      const res = await registerRequest(form);
+      const data = await res.json().catch(() => ({}));
+
       if (res.ok) {
-        setSuccess("Regjistrimi u krye me sukses! Mund të kyçesh tani.");
-        setUsername("");
-        setPassword("");
-        setTimeout(() => {
-          setLoggedIn && setLoggedIn(true);
-          window.location.href = "/login";
-        }, 1400);
+        setMessage({ type: "success", text: "Regjistrimi i suksesshëm!" });
+        // opsionale: login automatik nqs backend kthen token+user
+        // if (data.token && data.user) {
+        //   localStorage.setItem("tm_token", data.token);
+        //   localStorage.setItem("token", data.token);
+        //   login(data.token, data.user);
+        //   return navigate("/", { replace: true });
+        // }
+        setTimeout(() => navigate("/login", { replace: true }), 900);
       } else {
-        setError(data.error || "Regjistrimi dështoi!");
+        setMessage({ type: "error", text: data.message || "Gabim në regjistrim" });
       }
     } catch {
-      setError("Gabim në lidhje!");
+      setMessage({ type: "error", text: "Gabim në lidhje me serverin!" });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
+  };
+
+  const disabled = loading || !form.name.trim() || !form.email.trim() || !form.password.trim();
+
+  const controlSx = {
+    "& .MuiInputBase-root": {
+      background: "var(--chip)",
+      color: "var(--text)",
+      borderRadius: "14px",
+      border: "1px solid var(--chip-stroke)",
+    },
+    "& .MuiOutlinedInput-notchedOutline": { borderColor: "transparent" },
+    "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "var(--chip-stroke)" },
+    "& .MuiInputLabel-root": { color: "var(--muted)" },
+    "& .MuiSvgIcon-root": { color: "var(--muted)" },
+    "& .MuiInputBase-input::placeholder": { color: "#8d8d8d" },
+    "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "var(--accent)",
+      boxShadow: "0 0 0 4px rgba(255,128,0,.12)",
+    },
   };
 
   return (
-    <Box sx={{
-      minHeight: "100vh",
-      background: "linear-gradient(120deg,#fff,#fff7ef 80%)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }}>
-      <Paper elevation={4} sx={{
-        p: { xs: 3, sm: 5 },
-        maxWidth: 400,
-        width: "100%",
-        borderRadius: 5,
-        boxShadow: "0 6px 28px #ff800018"
-      }}>
-        <Typography
-          variant="h4"
-          align="center"
-          sx={{
-            fontWeight: 700,
-            letterSpacing: 1,
-            mb: 3,
-            color: "#ff8000"
-          }}
-        >
-          Regjistrohu në Top Mobile
+    <Box className="auth-page">
+      <Paper elevation={0} className="auth-card">
+        <Typography variant="h4" className="brand" component="div">
+          <span>topmobile</span>
         </Typography>
-        <form onSubmit={handleSubmit} style={{ width: "100%" }} autoComplete="off">
-          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
+
+        <Typography variant="subtitle1" align="center" sx={{ color: "var(--muted)", mb: 2 }}>
+          Krijo një llogari të re
+        </Typography>
+
+        {message.text && (
+          <Alert severity={message.type === "success" ? "success" : "error"} sx={{ mb: 2, borderRadius: 2 }}>
+            {message.text}
+          </Alert>
+        )}
+
+        <Box component="form" onSubmit={handleSubmit} noValidate>
+          <TextField label="Emri" name="name" value={form.name} onChange={handleChange}
+                     required fullWidth margin="dense" autoComplete="name" sx={controlSx} />
+          <TextField label="Email" name="email" type="email" value={form.email} onChange={handleChange}
+                     required fullWidth margin="dense" autoComplete="email" sx={controlSx} />
           <TextField
-            fullWidth
-            label="Përdoruesi"
-            variant="outlined"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            sx={{ mb: 2, background: "#fff" }}
+            label="Fjalëkalimi" name="password" type={showPwd ? "text" : "password"}
+            value={form.password} onChange={handleChange} required fullWidth margin="dense"
+            autoComplete="new-password" sx={controlSx}
             InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <PersonIcon color="warning" />
-                </InputAdornment>
-              ),
-            }}
-            autoComplete="username"
-            required
-          />
-          <TextField
-            fullWidth
-            label="Fjalëkalimi"
-            type={showPwd ? "text" : "password"}
-            variant="outlined"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            sx={{ mb: 3, background: "#fff" }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockIcon color="warning" />
-                </InputAdornment>
-              ),
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => setShowPwd(s => !s)}
+                    onClick={() => setShowPwd((v) => !v)}
                     edge="end"
-                    tabIndex={-1}
+                    aria-label={showPwd ? "Fshihe fjalëkalimin" : "Shfaq fjalëkalimin"}
+                    sx={{ color: "var(--muted)" }}
                   >
-                    {showPwd ? <VisibilityOff /> : <Visibility />}
+                    {showPwd ? "🙈" : "👁️"}
                   </IconButton>
                 </InputAdornment>
               ),
             }}
-            autoComplete="new-password"
-            required
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="warning"
-            size="large"
-            disabled={loading}
-            sx={{
-              fontWeight: 700,
-              borderRadius: 2,
-              textTransform: "none",
-              fontSize: 17,
-              py: 1.3,
-              boxShadow: "0 2px 12px #ff800038",
-              mb: 1
-            }}
-          >
-            {loading ? <CircularProgress size={25} sx={{ color: "#fff" }} /> : "Regjistrohu"}
+
+          <Button type="submit" fullWidth variant="contained" disabled={disabled} className="btn-accent" sx={{ mt: 2 }}>
+            {loading ? "Duke u regjistruar…" : "Regjistrohu"}
           </Button>
-        </form>
-        <Typography sx={{ color: "#50577a", mt: 3, textAlign: "center", fontSize: 15 }}>
-          Ke llogari?{" "}
-          <a
-            href="/login"
-            style={{
-              color: "#ff8000",
-              fontWeight: 600,
-              textDecoration: "none"
-            }}
-          >
-            Kyçu këtu
-          </a>
-        </Typography>
+        </Box>
+
+        <Box mt={2} textAlign="center">
+          <Typography fontSize={14} sx={{ color: "var(--muted)" }}>
+            Ke llogari? <Link to="/login" className="accent-link">Kyçu</Link>
+          </Typography>
+        </Box>
       </Paper>
     </Box>
   );
 }
+
+export default Register;

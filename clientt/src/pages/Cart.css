@@ -1,0 +1,263 @@
+:root {
+  --bg: #0b0b0b;
+  --surface: #0f0f0f;
+  --card: #111111;
+  --chip: #151515;
+  --chip-stroke: #1e1e1e;
+  --stroke: #1f1f1f;
+  --text: #ffffff;
+  --muted: #c9c9c9;
+  --accent: #ff8000;
+  --accent-hover: #e67300;
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.55);
+}
+
+/* Sfondi i faqes */
+.cart-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(1000px 600px at 85% -10%, rgba(255, 128, 0, 0.08), transparent 60%),
+    linear-gradient(180deg, rgba(255, 128, 0, 0.06) 0%, rgba(255, 128, 0, 0) 18%),
+    var(--bg);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  padding: calc(28px + env(safe-area-inset-top)) 16px calc(42px + env(safe-area-inset-bottom)) 16px;
+}
+
+/* Karta kryesore */
+.cart-card {
+  width: 100%;
+  max-width: 620px;
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  padding: 28px 24px;
+}
+
+/* Empty state */
+.cart-empty-card {
+  width: 100%;
+  max-width: 540px;
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  padding: 34px 26px;
+  text-align: center;
+}
+.cart-empty-emoji {
+  font-size: 40px;
+  margin-bottom: 6px;
+}
+.cart-empty-title {
+  font-size: clamp(18px, 4.8vw, 22px);
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+/* Titulli */
+.cart-title {
+  font-weight: 900;
+  font-size: clamp(20px, 5.4vw, 28px);
+  letter-spacing: .2px;
+  color: var(--text);
+  margin: 0 0 18px 0;
+}
+
+/* Lista e artikujve */
+.cart-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.cart-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 12px;
+
+  background: var(--card);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--chip-stroke);
+  box-shadow: 0 8px 24px rgba(0,0,0,.16);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.cart-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,128,0,.35);
+  box-shadow: 0 18px 42px rgba(0,0,0,.3);
+}
+
+.cart-item-info {
+  min-width: 0; /* truncation safeguard */
+}
+.cart-item-name {
+  font-weight: 800;
+  font-size: clamp(16px, 3.8vw, 18px);
+  color: var(--text);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;           /* lejon 2 rreshta në mobile */
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.cart-item-meta {
+  font-size: 14.5px;
+  margin-top: 4px;
+}
+.cart-item-price {
+  color: var(--accent);
+  font-weight: 800;
+}
+.cart-item-times {
+  color: var(--muted);
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.cart-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Totali */
+.cart-total {
+  margin: 16px 0 10px 0;
+  text-align: right;
+  font-size: clamp(17px, 4.2vw, 19px);
+  font-weight: 900;
+  color: var(--accent);
+}
+.cart-total span {
+  color: var(--text);
+}
+
+/* Butona — touch friendly */
+.btn-accent,
+.btn-outline,
+.btn-remove {
+  min-height: 40px;
+}
+
+/* Butona */
+.btn-accent {
+  background: var(--accent);
+  color: #0b0b0b;
+  font-weight: 900;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background .14s ease, transform .03s ease;
+}
+.btn-accent:hover {
+  background: var(--accent-hover);
+}
+.btn-accent:disabled {
+  background: #5a5a5a;
+  cursor: not-allowed;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: border-color .14s ease, color .14s ease, transform .03s ease;
+}
+.btn-outline:hover {
+  border-color: var(--accent-hover);
+  color: var(--accent-hover);
+}
+
+.btn-remove {
+  background: var(--chip);
+  color: var(--text);
+  border: 1px solid var(--chip-stroke);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color .14s ease, transform .03s ease, box-shadow .14s ease;
+}
+.btn-remove:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255,128,0,.12);
+}
+
+/* Rreshti i butonave poshtë */
+.cart-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+  justify-content: flex-end;
+}
+
+/* Motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .cart-item:hover {
+    transform: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,.16);
+  }
+}
+
+/* ===================== Responsive ===================== */
+
+/* Tableta & poshtë */
+@media (max-width: 768px) {
+  .cart-card {
+    padding: 24px 18px;
+  }
+}
+
+/* Mobile të vegjël */
+@media (max-width: 580px) {
+  .cart-card {
+    padding: 22px 16px;
+  }
+  .cart-item {
+    padding: 14px;
+    grid-template-columns: 1fr;   /* info sipër, actions poshtë */
+    row-gap: 10px;
+  }
+  .cart-item-actions {
+    justify-self: end;
+  }
+  .cart-total {
+    text-align: left;
+    margin-top: 18px;
+  }
+}
+
+/* iPhone 12 mini / 320–360px */
+@media (max-width: 400px) {
+  .cart-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cart-actions .btn-accent,
+  .cart-actions .btn-outline {
+    width: 100%;
+  }
+  .btn-remove {
+    width: 100%;
+    text-align: center;
+  }
+}

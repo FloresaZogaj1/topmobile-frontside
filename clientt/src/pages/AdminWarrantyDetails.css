@@ -1,0 +1,119 @@
+:root{
+  --bg:#0e0f12;
+  --card:#16171c;
+  --card-2:#1b1d23;
+  --border:#24262f;
+  --text:#e9edf1;
+  --muted:#aab2bf;
+  --accent:#ff8000;
+  --accent-2:#e66e00;
+  --shadow:0 20px 50px rgba(0,0,0,.45);
+}
+
+/* ========== EKRANI (njësoj si më parë) ========== */
+.awd-wrap{min-height:100vh;background: radial-gradient(1200px 800px at 10% -10%, #15171c 0%, transparent 50%) var(--bg);padding:clamp(16px,3vw,32px);color:var(--text);}
+.awd-card{max-width:1040px;margin:0 auto;background:linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.00) 100%), var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:clamp(18px,2.6vw,28px);}
+
+.awd-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:18px;border-bottom:1px dashed var(--border);}
+.awd-title{margin:0;font-weight:800;letter-spacing:.3px;font-size:clamp(22px,2.6vw,28px);color:var(--text);}
+.awd-sub{margin:6px 0 0 0;color:var(--muted);font-size:14px;}
+
+.awd-actions{display:flex;gap:10px;}
+.awd-btn{appearance:none;border:none;outline:none;background:var(--accent);color:#0b0b0b;font-weight:800;letter-spacing:.2px;padding:10px 14px;border-radius:12px;cursor:pointer;transition:transform .12s ease, background .12s ease, box-shadow .12s ease;box-shadow:0 12px 28px rgba(255,128,0,.22);}
+.awd-btn:hover{background:var(--accent-2);transform:translateY(-1px);}
+.awd-btn:active{transform:translateY(0) scale(.98);}
+.awd-btn-outline{background:transparent;color:var(--text);border:1px solid var(--border);box-shadow:none;}
+.awd-btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+
+.awd-section{margin-top:18px;padding:16px;background:var(--card-2);border:1px solid var(--border);border-radius:14px;}
+.awd-section-title{margin:0 0 12px 0;font-size:16px;font-weight:800;color:var(--accent);letter-spacing:.2px;}
+
+.awd-grid{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:14px;}
+@media (max-width:920px){.awd-grid{grid-template-columns:repeat(2, minmax(0,1fr));}}
+@media (max-width:620px){.awd-grid{grid-template-columns:1fr;}}
+.awd-item{background:#14151a;border:1px solid var(--border);border-radius:12px;padding:12px 14px;min-height:64px;display:flex;flex-direction:column;justify-content:center;}
+.awd-label{color:var(--muted);font-size:12px;letter-spacing:.2px;}
+.awd-value{margin-top:4px;color:var(--text);font-weight:700;font-size:15px;}
+.awd-code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:14px;background:#0f1116;border:1px dashed var(--border);padding:6px 8px;border-radius:8px;display:inline-block;}
+
+.awd-badge{background:#1e2027;border:1px solid var(--accent);color:var(--accent);font-weight:800;padding:4px 10px;border-radius:999px;font-size:12px;}
+.awd-price{color:var(--accent);font-weight:900;letter-spacing:.3px;}
+
+.awd-note{background:#111318;border:1px solid var(--border);color:var(--text);border-radius:12px;padding:12px 14px;line-height:1.55;min-height:68px;white-space:pre-wrap;}
+.awd-footer{margin-top:18px;padding-top:10px;border-top:1px dashed var(--border);color:var(--muted);font-size:12px;text-align:center;}
+.awd-loading{min-height:60vh;display:grid;place-items:center;background:var(--bg);color:var(--muted);font-weight:700;letter-spacing:.2px;}
+
+/* Fshi print-sheet në ekran */
+.print-sheet{display:none;}
+
+@media print {
+  /* 1) Parametrat e faqes */
+  @page { size: A4; margin: 0; }
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #0e0f12 !important;
+    -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+  }
+
+  /* 2) Fshi gjithçka JASHTË aplikacionit */
+  body > *:not(#root) { display:none !important; }
+
+  /* 3) Nga #root, trego VETËM .print-root */
+  #root > *:not(.print-root) { display:none !important; }
+
+  /* 4) Brenda .print-root, trego VETËM .print-sheet */
+  .print-root > *:not(.print-sheet) { display:none !important; }
+
+  /* 5) Fleta fikse, një faqe e vetme */
+  .print-sheet{
+    display:block !important;
+    position: relative !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    overflow: hidden !important;     /* parandalon faqen 2/3 */
+    padding: 10mm !important;        /* hapësira e brendshme */
+    box-sizing: border-box !important;
+    background:#0e0f12 !important;
+    color:#e9edf1 !important;
+    box-shadow:none !important;
+    border:none !important;
+  }
+
+  /* — Stilimi i brendshëm, i pandryshuar — */
+  .ps-header{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid #2a2f3a;padding-bottom:8mm;margin-bottom:6mm;}
+  .ps-title{font-size:20pt;font-weight:800;letter-spacing:.2pt;align-self:center;}
+  .ps-company{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;}
+  .ps-logo{width:26pt;height:26pt;border-radius:6pt;background:#ff8000;color:#0b0b0b;display:inline-grid;place-items:center;font-weight:900;font-size:12pt;}
+  .ps-logo-img{height:28pt !important;width:auto !important;display:block;}
+  .ps-addr{font-size:9.5pt;line-height:1.35;color:#cfd6df;}
+  .ps-name{font-weight:800;color:#fff;margin-bottom:1pt;}
+
+  .ps-info{display:grid;grid-template-columns:1fr;row-gap:2mm;font-size:10.5pt;margin-bottom:6mm;overflow-wrap:anywhere;word-break:break-word;}
+
+  .ps-table{width:100%;border-collapse:collapse;margin:0 0 8mm 0;font-size:10.5pt;page-break-inside:avoid;table-layout:fixed;}
+  .ps-table th,.ps-table td{border:1px solid #2a2f3a;padding:6pt 8pt;text-align:left;overflow-wrap:anywhere;word-break:break-word;}
+  .ps-table thead th{background:#20232b;color:#e9edf1;font-weight:800;}
+  .ps-code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;background:#101217;border:1px dashed #323644;padding:3pt 5pt;border-radius:4pt;display:inline-block;}
+
+  .ps-terms{page-break-inside:avoid;}
+  .ps-terms h4{margin:0 0 4mm 0;font-size:12pt;color:#ffb36a;}
+  .ps-terms p{margin:0 0 3mm 0;line-height:1.5;}
+  .ps-terms ul{margin:0 0 3mm 18px;padding:0;}
+  .ps-terms li{margin:1.5mm 0;}
+
+  .ps-sign{margin-top:12mm;border-top:1px dashed #2a2f3a;padding-top:6mm;display:flex;justify-content:flex-end;align-items:center;gap:8px;page-break-inside:avoid;}
+  .ps-sign-label{font-style:italic;color:#cfd6df;}
+  .ps-sign-caret{color:#7f8aa1;}
+
+  .print-only{display:block !important;}
+  .no-print{display:none !important;}
+}
+
+/* Uniformizimi i ngjyrave të tabelës */
+@media print {
+  .ps-table { border: 1px solid #2a2f3a !important; background: #0e0f12 !important; }
+  .ps-table th, .ps-table td { border-color: #2a2f3a !important; }
+  .ps-table tbody td { background: #0f1116 !important; color: #e9edf1 !important; }
+}

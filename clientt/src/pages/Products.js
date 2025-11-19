@@ -1,223 +1,328 @@
+// src/pages/Products.jsx
 import React, { useEffect, useState } from "react";
-import { Container, Card, CardContent, Typography, Button, Box, CircularProgress } from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useCart } from "../CartContext";
+import { Link } from "react-router-dom";
+import SEO from "../seo/SEO";
 
-const API_URL = process.env.REACT_APP_API_URL;
-const token   = localStorage.getItem("token");
+const DEFAULT_IMAGE = "/default-product.jpg";
+const API_URL =
+  process.env.REACT_APP_API_URL ||
+  (window.location.hostname.endsWith("topmobile.store")
+    ? "https://api.topmobile.store"
+    : "http://localhost:4000");
 
-function ProductCard({ product, addToCart }) {
-  return (
-    <Card
-      sx={{
-        borderRadius: 1.5,
-        boxShadow: "none",
-        border: "none",
-        bgcolor: "#fff",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        position: "relative",
-        transition: "transform 0.13s, box-shadow 0.14s",
-        "&:hover": {
-          transform: "translateY(-4px) scale(1.02)",
-          boxShadow: "0 8px 32px #ff800018",
-          border: "1px solid #ff8000",
-        },
-        minHeight: 340,
-        mb: 2,
-      }}
-    >
-      {/* Discount badge */}
-      {product.oldPrice > product.price && (
-        <Typography
-          sx={{
-            position: "absolute",
-            top: 16,
-            left: 16,
-            bgcolor: "#ff8000",
-            color: "#fff",
-            px: 2,
-            py: "2px",
-            borderRadius: "8px",
-            fontWeight: 700,
-            fontSize: 14,
-            zIndex: 1,
-          }}
-        >
-          -{Math.round(100 - (product.price / product.oldPrice) * 100)}%
-        </Typography>
-      )}
+/* —— CRITICAL CSS (compact + line-clamp + layout stable) —— */
+const CRITICAL_CSS = `
+#tm-products{
+  /* Use global design system variables instead of local ones */
+  max-width: 1240px; 
+  margin: 40px auto; 
+  padding: 0 16px 48px;
+  background: var(--bg-primary);
+}
+#tm-products .heading{
+  margin: 0 0 22px; 
+  color: var(--text-primary); 
+  font-weight: var(--weight-black);
+  font-size: clamp(22px, 4.8vw, 28px); 
+  letter-spacing: .2px;
+}
 
-      {/* Image */}
-      <Box
-        sx={{
-          p: 2,
-          bgcolor: "#fafbfc",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: 150,
-          borderTopLeftRadius: 6,
-          borderTopRightRadius: 6,
-        }}
-      >
-        <img
-          src={product.image || "https://via.placeholder.com/300x150"}
-          alt={product.name}
-          style={{ maxHeight: 110, maxWidth: "90%", objectFit: "contain" }}
-        />
-      </Box>
+/* GRID */
+#tm-products .list{
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+  gap: 24px !important;
+}
 
-      {/* Content */}
-      <CardContent sx={{ pt: 1, flex: 1 }}>
-        <Typography fontWeight={600} fontSize={15} color="#222" sx={{ mb: 0.5, minHeight: 36 }}>
-          {product.name}
-        </Typography>
-        <Typography color="#888" fontSize={13} sx={{ mb: 1, minHeight: 25 }}>
-          {product.description || product.desc}
-        </Typography>
-        <Box sx={{ mb: 2 }}>
-          {product.oldPrice > product.price && (
-            <Typography
-              component="span"
-              sx={{ textDecoration: "line-through", color: "#bbb", mr: 1 }}
-            >
-              €{product.oldPrice}
-            </Typography>
-          )}
-          <Typography component="span" fontWeight={700} fontSize={20} color="#023047">
-            €{product.price}
-          </Typography>
-        </Box>
-      </CardContent>
+/* CARD */
+#tm-products .card{
+  position: relative;
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: var(--radius-2xl) !important;
+  box-shadow: var(--shadow-lg) !important;
+  display: flex !important; 
+  flex-direction: column !important;
+  min-height: 420px !important; 
+  overflow: hidden !important;
+  transition: transform .18s ease, box-shadow .2s ease, border-color .2s ease;
+}
+#tm-products .card:hover{ 
+  transform: translateY(-4px); 
+  box-shadow: var(--shadow-2xl); 
+  border-color: var(--primary); 
+}
 
-      {/* Add to cart */}
-      <Box sx={{ px: 2, pb: 2 }}>
-        <Button
-          fullWidth
-          variant="contained"
-          sx={{
-            bgcolor: "#023047",
-            color: "#fff",
-            textTransform: "none",
-            fontWeight: 600,
-            fontSize: 16,
-            borderRadius: 1.5,
-            "&:hover": { bgcolor: "#e66e00" },
-          }}
-          onClick={() => addToCart(product)}
-        >
-          Shto në Shportë 🛒
-        </Button>
-      </Box>
-    </Card>
-  );
+/* BADGE */
+#tm-products .badge{
+  position: absolute; 
+  top: 14px; 
+  left: 14px; 
+  z-index: 2;
+  background: var(--primary); 
+  color: white;
+  padding: 4px 10px; 
+  border-radius: var(--radius-lg); 
+  font-weight: var(--weight-black); 
+  font-size: var(--text-xs);
+  box-shadow: var(--shadow-primary);
+}
+
+/* IMAGE */
+#tm-products .image-link{ display:block; text-decoration:none; }
+#tm-products .image-link.is-disabled{ pointer-events:none; cursor:not-allowed; opacity:.92; }
+#tm-products .image-wrap{
+  padding:18px 22px; aspect-ratio:16/12;
+  display:flex; align-items:center; justify-content:center;
+  background:
+    radial-gradient(70% 60% at 50% 60%, rgba(255,122,0,.10) 0%, rgba(10,10,13,0) 60%),
+    #0a0a0d;
+  border-top-left-radius:18px; border-top-right-radius:18px;
+  border-bottom:1px solid var(--stroke);
+}
+#tm-products .image-wrap img{
+  width:100%; max-height:170px; height:auto; object-fit:contain;
+  display:block; border-radius:10px;
+  filter:drop-shadow(0 10px 24px rgba(0,0,0,.35));
+}
+
+/* INFO – kolonë e qëndrueshme */
+#tm-products .info{
+  box-sizing:border-box !important;
+  padding:14px 16px 8px 16px !important; /* pak hapësirë poshtë që të mos prekë butonin */
+  text-align:left;
+  display:flex !important;
+  flex-direction:column !important;
+  row-gap:0 !important;
+}
+#tm-products .title-link{ text-decoration:none; }
+#tm-products .title-link.is-disabled{ pointer-events:none; cursor:not-allowed; opacity:.92; }
+
+/* Titulli – saktësisht 2 rreshta */
+#tm-products .title{
+  margin: var(--space-xs) 0 var(--space-xs);
+  font-size: var(--text-lg); 
+  font-weight: var(--weight-black); 
+  color: var(--text-primary);
+  line-height: 1.25;
+  display: -webkit-box; 
+  -webkit-box-orient: vertical; 
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: calc(1.25em * 2);
+  max-height: calc(1.25em * 2);
+  overflow-wrap: anywhere; 
+  word-break: break-word; 
+  hyphens: auto;
+}
+
+/* Përshkrimi – saktësisht 2 rreshta */
+#tm-products .desc{
+  font-size: var(--text-sm); 
+  color: var(--text-secondary); 
+  margin: 0 0 var(--space-sm);
+  line-height: 1.35;
+  display: -webkit-box; 
+  -webkit-box-orient: vertical; 
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height:calc(1.35em * 2);
+  max-height:calc(1.35em * 2);
+  overflow-wrap:anywhere; word-break:break-word; hyphens:auto;
+}
+
+/* Çmimi – gjithmonë në fund të .info */
+#tm-products .price-row{
+  margin: var(--space-xs) 0 var(--space-sm) !important;
+  padding-top: var(--space-xs) !important;
+  margin-top: auto !important; /* e shtyn poshtë */
+}
+#tm-products .old-price{ 
+  color: var(--text-tertiary); 
+  font-size: var(--text-sm); 
+  text-decoration: line-through; 
+  margin-right: var(--space-sm); 
+}
+#tm-products .price{ 
+  color: var(--primary); 
+  font-weight: var(--weight-black); 
+  font-size: var(--text-xl); 
+  letter-spacing: 0.2px; 
+}
+
+/* CTA – COMPACT (36px) */
+#tm-products .add{
+  all: unset;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--space-xs) !important;
+
+  height: 36px !important;
+  padding: 0 var(--space-sm) !important;
+  width: calc(100% - 32px) !important;
+  margin: var(--space-sm) var(--space-md) var(--space-sm) var(--space-md) !important;
+
+  background: var(--primary) !important;
+  color: white !important;
+  border-radius: var(--radius-pill) !important;
+
+  font-weight: var(--weight-bold) !important;
+  font-size: var(--text-xs) !important;
+  letter-spacing: 0.2px !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+
+  cursor: pointer !important;
+  border: none !important;
+  position: static !important;
+  box-shadow: var(--shadow-button) !important;
+  transition: var(--transition-base) !important;
+}
+#tm-products .add:hover{ 
+  background: var(--primary-hover) !important; 
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-button-hover) !important;
+}
+#tm-products .add:active{ transform: translateY(0.5px); }
+#tm-products .cart{ font-size: var(--text-sm) !important; transform: translateY(0.5px); }
+
+@media (max-width: 420px){
+  #tm-products .image-wrap{ aspect-ratio: 16/13; }
+  #tm-products .image-wrap img{ max-height: 160px; }
+}
+`;
+
+function formatPrice(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "€ —";
+  return Number.isInteger(n) ? `€ ${n}` : `€ ${n.toFixed(2)}`;
 }
 
 export default function Products() {
-  const [products, setProducts] = useState(null); // null = loading
-  const [search, setSearch]       = useState("");
-  const [minPrice, setMinPrice]   = useState("");
-  const [maxPrice, setMaxPrice]   = useState("");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`${API_URL}/api/products`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + localStorage.getItem("token"),
-          
-          },
-        });
-        if (!res.ok) throw new Error(`Fetch error ${res.status}`);
-        const data = await res.json();
+    fetch(`${API_URL}/api/products`)
+      .then((res) => res.json())
+      .then((data) => {
         setProducts(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("fetchProducts error:", err);
-        setProducts([]); 
-      }
-    })();
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
-  // kur products===null => po jet loading
-  if (products === null) {
-    return (
-      <Box sx={{ textAlign: "center", py: 10 }}>
-        <CircularProgress color="primary" />
-      </Box>
-    );
-  }
+  // JSON-LD
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Ballina", item: "https://topmobile.store/" },
+      { "@type": "ListItem", position: 2, name: "Produktet", item: "https://topmobile.store/products" },
+    ],
+  };
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: (products || []).map((p, i) => {
+      const hasPage = Boolean(p?.slug && String(p.slug).trim().length > 0);
+      return {
+        "@type": "ListItem",
+        position: i + 1,
+        url: hasPage ? `https://topmobile.store/products/${p.slug}` : `https://topmobile.store/products`,
+        name: p.name,
+      };
+    }),
+  };
 
-  // filtrimi
-  const filtered = products.filter(p => {
-    const name = p.name?.toLowerCase() || "";
-    const desc = (p.description || p.desc || "").toLowerCase();
-    const q    = search.toLowerCase();
-    const matchesSearch = name.includes(q) || desc.includes(q);
-    const price = Number(p.price);
-    const okMin  = minPrice === "" || price >= Number(minPrice);
-    const okMax  = maxPrice === "" || price <= Number(maxPrice);
-    return matchesSearch && okMin && okMax;
-  });
+  if (loading) return <div style={{ color: "#9aa3b2", padding: 40 }}>Loading...</div>;
+  if (!products.length) return <div style={{ color: "#9aa3b2", padding: 40 }}>S’ka produkte në sistem.</div>;
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 5, mb: 6 }}>
-      <Typography variant="h4" mb={4} fontWeight={700} color="#023047">
-        Të gjitha produktet
-      </Typography>
+    <div id="tm-products">
+      <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
+      <SEO />
+      <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+      <script type="application/ld+json">{JSON.stringify(itemListJsonLd)}</script>
 
-      {/* Filter inputs */}
-      <Box sx={{ display: "flex", gap: 2, mb: 4, flexWrap: "wrap" }}>
-        <Box
-          component="input"
-          placeholder="Kërko produkt..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          sx={{ flex: 1, minWidth: 200, p:1, border: "1px solid #ddd", borderRadius:1 }}
-        />
-        <Box
-          component="input"
-          type="number"
-          placeholder="Çmimi minimal"
-          value={minPrice}
-          onChange={e => setMinPrice(e.target.value)}
-          sx={{ width: 120, p:1, border: "1px solid #ddd", borderRadius:1 }}
-        />
-        <Box
-          component="input"
-          type="number"
-          placeholder="Çmimi maksimal"
-          value={maxPrice}
-          onChange={e => setMaxPrice(e.target.value)}
-          sx={{ width: 120, p:1, border: "1px solid #ddd", borderRadius:1 }}
-        />
-      </Box>
+      <h2 className="heading">Produktet</h2>
 
-      {/* Product grid */}
-      {filtered.length > 0 ? (
-        <Box
-          sx={{
-            display: "grid",
-            gap: 4,
-            gridTemplateColumns: "repeat(4,1fr)",
-            "@media (max-width:1200px)": { gridTemplateColumns: "repeat(3,1fr)" },
-            "@media (max-width:900px)": { gridTemplateColumns: "repeat(2,1fr)" },
-            "@media (max-width:600px)": { gridTemplateColumns: "1fr" },
-          }}
-        >
-          {filtered.map(prod => (
-            <ProductCard key={prod.id} product={prod} addToCart={addToCart} />
-          ))}
-        </Box>
-      ) : (
-        <Typography
-          sx={{ textAlign: "center", py: 10, color: "#023047", fontSize: 18, fontWeight: 600 }}
-        >
-          S’ka produkte.
-        </Typography>
-      )}
-    </Container>
+      <div className="list">
+        {products.map((prod) => {
+          const hasPage = Boolean(prod?.slug && String(prod.slug).trim().length > 0);
+          const productUrl = hasPage ? `/products/${prod.slug}` : undefined;
+          const imgSrc = prod.image || DEFAULT_IMAGE;
+
+          const hasDiscount = prod.oldPrice && Number(prod.oldPrice) > Number(prod.price);
+          const discountPct = hasDiscount
+            ? Math.round((1 - Number(prod.price) / Number(prod.oldPrice)) * 100)
+            : null;
+
+          const ImageWrapper = ({ children }) =>
+            hasPage ? (
+              <Link to={productUrl} className="image-link" aria-label={`Shiko ${prod.name}`}>{children}</Link>
+            ) : (
+              <div className="image-link is-disabled" aria-disabled="true" title="Ky produkt s'ka faqe">{children}</div>
+            );
+
+          const TitleWrapper = ({ children }) =>
+            hasPage ? (
+              <Link to={productUrl} className="title-link">{children}</Link>
+            ) : (
+              <div className="title-link is-disabled" aria-disabled="true" title="Ky produkt s'ka faqe">{children}</div>
+            );
+
+          return (
+            <article key={prod.id} className="card">
+              {hasDiscount && <span className="badge">-{discountPct}%</span>}
+
+              <ImageWrapper>
+                <div className="image-wrap">
+                  <img
+                    src={imgSrc}
+                    alt={`${prod.name} – Top Mobile`}
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = DEFAULT_IMAGE;
+                    }}
+                  />
+                </div>
+              </ImageWrapper>
+
+              <div className="info">
+                <TitleWrapper>
+                  <h3 className="title">{prod.name}</h3>
+                </TitleWrapper>
+
+                <p className="desc">{prod.description || "—"}</p>
+
+                <div className="price-row">
+                  {hasDiscount && <span className="old-price">{formatPrice(prod.oldPrice)}</span>}
+                  <span className="price">{formatPrice(prod.price)}</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="add"
+                onClick={() => addToCart(prod)}
+                aria-label={`Shto ${prod.name} në shportë`}
+              >
+                SHTO NË SHPORTË
+                <ShoppingCartIcon className="cart" />
+              </button>
+            </article>
+          );
+        })}
+      </div>
+    </div>
   );
 }

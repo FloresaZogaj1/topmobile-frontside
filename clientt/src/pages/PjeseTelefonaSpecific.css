@@ -1,0 +1,162 @@
+/* Stilizim specifik për faqen e Pjesë për Telefona */
+
+/* Grid 3x3 vetëm për këtë faqe */
+.phone-parts-page .products-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: var(--space-5) !important;
+  align-items: stretch !important;
+}
+
+/* Cards më të balancuara vetëm për këtë faqe */
+.phone-parts-page .modern-product-card {
+  padding: var(--space-4) !important;
+  min-height: 480px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
+/* Images të balancuara vetëm për këtë faqe */
+.phone-parts-page .modern-product-image {
+  margin: var(--space-3) 0 var(--space-4) !important;
+  padding: var(--space-5) !important;
+  min-height: 200px !important;
+  flex-shrink: 0 !important;
+}
+
+.phone-parts-page .modern-product-image img {
+  max-width: 220px !important;
+  height: 180px !important;
+}
+
+/* Content area që stretch-ohet */
+.phone-parts-page .modern-product-info {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Typography të përmirësuar */
+.phone-parts-page .product-category-label {
+  font-size: var(--text-xs) !important;
+  font-weight: var(--weight-semibold) !important;
+  color: var(--text-secondary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.8px !important;
+  margin-bottom: var(--space-2) !important;
+}
+
+.phone-parts-page .modern-product-title {
+  font-size: var(--text-lg) !important;
+  font-weight: var(--weight-bold) !important;
+  color: var(--text-primary) !important;
+  line-height: 1.3 !important;
+  margin-bottom: var(--space-3) !important;
+  flex-shrink: 0 !important;
+}
+
+/* Description që expand-ohet */
+.phone-parts-page .modern-product-info Typography:nth-of-type(2) {
+  flex: 1 !important;
+  font-size: var(--text-sm) !important;
+  line-height: 1.5 !important;
+  color: var(--text-secondary) !important;
+  margin-bottom: var(--space-4) !important;
+}
+
+/* Button në fund */
+.phone-parts-page .modern-product-buttons {
+  margin-top: auto !important;
+  flex-shrink: 0 !important;
+}
+
+.phone-parts-page .btn-buy-now {
+  width: 100% !important;
+  padding: var(--space-3) var(--space-4) !important;
+  font-size: var(--text-sm) !important;
+  font-weight: var(--weight-semibold) !important;
+}
+
+/* Zoom më i butë vetëm për këtë faqe */
+.phone-parts-page .modern-product-card:hover .modern-product-image img {
+  transform: scale(1.2) !important;
+}
+
+/* Responsive për faqen e pjesëve */
+@media (max-width: 1200px) {
+  .phone-parts-page .products-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: var(--space-4) !important;
+  }
+  
+  .phone-parts-page .modern-product-card {
+    min-height: 450px !important;
+  }
+}
+
+@media (max-width: 968px) {
+  .phone-parts-page .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--space-5) !important;
+  }
+  
+  .phone-parts-page .modern-product-card {
+    min-height: 420px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .phone-parts-page .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--space-3) !important;
+  }
+  
+  .phone-parts-page .modern-product-card {
+    min-height: 380px !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+  }
+  
+  .phone-parts-page .modern-product-image {
+    min-height: 160px !important;
+    padding: var(--space-4) !important;
+  }
+  
+  .phone-parts-page .modern-product-image img {
+    height: 140px !important;
+  }
+}
+
+/* Extra small phones — one column for better readability */
+@media (max-width: 480px) {
+  .phone-parts-page .products-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-4) !important;
+  }
+
+  .phone-parts-page .modern-product-card {
+    min-height: 340px !important;
+    max-width: 520px !important;
+    margin: 0 auto !important;
+    padding: var(--space-4) !important;
+  }
+
+  .phone-parts-page .modern-product-image {
+    min-height: 140px !important;
+    padding: var(--space-3) !important;
+  }
+
+  .phone-parts-page .modern-product-image img {
+    max-width: 180px !important;
+    height: 120px !important;
+  }
+
+  .phone-parts-page .modern-product-title {
+    font-size: var(--text-base) !important;
+  }
+
+  .phone-parts-page .btn-buy-now {
+    padding: calc(var(--space-3) + 2px) var(--space-4) !important;
+    font-size: var(--text-base) !important;
+  }
+}

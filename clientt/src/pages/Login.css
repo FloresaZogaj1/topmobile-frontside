@@ -1,74 +1,165 @@
-.login-container {
-    min-height: 60vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #fafcff;
+:root {
+  --bg: #0b0b0b;
+  --surface: #0f0f0f;
+  --card: #111111;
+  --chip: #151515;
+  --chip-stroke: #1e1e1e;
+  --stroke: #1f1f1f;
+  --text: #ffffff;
+  --muted: #c9c9c9;
+  --accent: #ff8000;
+  --accent-hover: #e67300;
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.55);
+}
+
+/* Background i faqes */
+.auth-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(1000px 600px at 80% -10%, rgba(255, 128, 0, 0.08), transparent 60%),
+    linear-gradient(180deg, rgba(255, 128, 0, 0.06) 0%, rgba(255, 128, 0, 0) 18%),
+    var(--bg);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+/* Karta e login-it */
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background:#0b0b0b;
+  color: var(--text);
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  padding: 28px 26px 22px 26px;
+}
+
+/* Brand */
+.brand {
+  text-align: center;
+  font-weight: 900 !important;
+  letter-spacing: 0.2px;
+  margin-bottom: 6px !important;
+}
+.brand span {
+  background: linear-gradient(90deg, #ff8a00, #ff8000, #ff6a00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Butoni accent i unifikuar */
+.btn-accent {
+  background: var(--accent) !important;
+  color: #0b0b0b !important;
+  font-weight: 900 !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  text-transform: none !important;
+}
+.btn-accent:hover {
+  background: var(--accent-hover) !important;
+}
+
+/* Butonët e social login në stil "chip" */
+.btn-chip {
+  color: var(--text) !important;
+  border-color: var(--chip-stroke) !important;
+  background: var(--chip) !important;
+  border-radius: 999px !important;
+  text-transform: none !important;
+}
+.btn-chip:hover {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(255, 128, 0, 0.12) !important;
+}
+
+/* Link në accent */
+.accent-link {
+  color: var(--accent);
+  font-weight: 800;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .auth-card {
+    border-radius: 14px;
+    padding: 22px 18px 18px 18px;
   }
-  
-  .login-form {
-    background: #fff;
-    padding: 34px 38px 26px 38px;
-    border-radius: 12px;
-    box-shadow: 0 8px 36px rgba(0,0,0,0.07);
-    display: flex;
-    flex-direction: column;
-    min-width: 320px;
-    gap: 15px;
+}
+/* ===== MOBILE FIXES (vendose NË FUND) ===== */
+
+/* Përdor small viewport units që navbar/adresa e mobile të mos prishë qendrimin */
+.auth-page{
+  min-height: 100svh;
+  padding: 20px;
+}
+
+/* Bëje kartën vërtet të zezë në mobile, edhe në Safari (me !important) */
+@media (max-width: 600px){
+  .auth-card{
+    background: var(--bg) !important;     /* all-black */
+    border: 1px solid #1a1a1a !important;  /* kontur i butë dark */
+    border-radius: 16px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,.45) !important;
+    padding: 22px 18px 18px 18px !important;
+    width: 100% !important;
+    max-width: 420px !important;
   }
-  
-  .login-form h2 {
-    margin-bottom: 16px;
-    font-weight: 600;
-    text-align: center;
+
+  /* Heq pak intensitetin e sfondit me gradient që të mos duket “njolla” */
+  .auth-page{
+    background:
+      radial-gradient(900px 520px at 75% -10%, rgba(255,128,0,.05), transparent 60%),
+      linear-gradient(180deg, rgba(255,128,0,.04) 0%, rgba(255,128,0,0) 18%),
+      var(--bg);
   }
-  
-  .login-form input {
-    padding: 11px 13px;
-    border: 1.5px solid #e6e9f1;
-    border-radius: 8px;
-    font-size: 1.06rem;
-    outline: none;
-    transition: border-color 0.2s;
+
+  /* Input-et: lartësi më e madhe dhe font-size 16px që iOS të mos bëjë zoom */
+  .auth-card .MuiInputBase-root{
+    height: 46px !important;
+    border-radius: 14px !important;
+    font-size: 16px !important;            /* stop iOS zoom */
+    background: var(--chip) !important;
+    border: 1px solid var(--chip-stroke) !important;
   }
-  
-  .login-form input:focus {
-    border-color: #3498db;
+  .auth-card .MuiInputBase-input{
+    padding: 10px 12px !important;
   }
-  
-  .login-form button {
-    background: #222c36;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 11px 0;
-    font-weight: 500;
-    font-size: 1.07rem;
-    margin-top: 12px;
-    cursor: pointer;
-    transition: background 0.19s;
+
+  /* Butoni “Kyçu” – i madh, i rrumbullakët dhe i lehtë për t’u klikuar */
+  .btn-accent{
+    height: 46px !important;
+    border-radius: 999px !important;
+    font-size: 15px !important;
+    font-weight: 900 !important;
   }
-  .login-form button:hover {
-    background: #144174;
+
+  /* Butoni Google në stil chip, pak më i ulët */
+  .btn-chip{
+    height: 44px !important;
+    border-radius: 999px !important;
+    font-size: 15px !important;
   }
-  
-  .register-link {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 0.97em;
-  }
-  .register-link a {
-    color: #144174;
-    text-decoration: underline;
-  }
-  .error {
-    background: #ffeaea;
-    border: 1px solid #eb7777;
-    color: #b72626;
-    padding: 7px 10px;
-    border-radius: 7px;
-    text-align: center;
-    margin-bottom: -5px;
-    font-size: 0.98em;
-  }
-  
+
+  /* Tekstet sekondare pak më të zbehta për kontrast të mirë në mobile */
+  .auth-card .MuiTypography-subtitle1{ opacity: .9; }
+}
+
+/* Autofill (Android/Safari) – hiq ngjyrën e verdhë dhe bëje dark */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus{
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0px 1000px var(--chip) inset;
+  caret-color: var(--text);
+}
+
+/* Reduce motion / safe area (opsionale) */
+@supports (padding: max(0px)) {
+  .auth-page{ padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+}

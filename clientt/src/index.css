@@ -1,13 +1,40 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* src/styles/theme.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
+@import './styles/modern-design-system.css';
+
+/* Modern color system is now defined in modern-design-system.css */
+
+html, body, #root{
+  background:var(--bg);
+  color:var(--text);
+  font-family: Montserrat, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+a{ color:inherit; text-decoration:none; }
+
+h1{ font-size: clamp(34px, 6.4vw, 88px); line-height:1.02; letter-spacing:-.02em; }
+h2{ font-size: clamp(26px, 3.6vw, 48px); line-height:1.04; letter-spacing:-.015em; }
+
+/* generic card */
+.card{
+  background:var(--card);
+  border:1px solid #1a1a1a;
+  border-radius:24px;
+  box-shadow: var(--shadow);
 }
+
+/* primary CTA */
+.btn-primary{
+  background:var(--accent);
+  color:#fff;
+  border-radius:999px;
+  padding:12px 26px;
+  font-weight:800;
+  border:none;
+  box-shadow:0 10px 30px rgba(255,122,0,.25);
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn-primary:hover{ background:var(--accent-600); transform:translateY(-1px); box-shadow:0 14px 36px rgba(255,122,0,.35); }

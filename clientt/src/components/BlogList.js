@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import blogPosts from "../blogData";
 import BlogSubscribe from "./BlogSubscribe";
 
-// Shtojmë një media query për mobile:
 const responsiveStyle = `
   @media (max-width: 700px) {
     .blog-list-container { padding: 18px 0 30px 0 !important; }
@@ -20,38 +19,56 @@ const responsiveStyle = `
 `;
 
 const BlogList = () => (
-  <div className="blog-list-container" style={{
-    maxWidth: 1200,
-    margin: "0 auto",
-    padding: "48px 0 60px 0"
-  }}>
+  <div
+    className="blog-list-container"
+    style={{
+      maxWidth: 1200,
+      margin: "0 auto",
+      padding: "48px 0 60px 0",
+      background: "var(--bg)",
+      color: "var(--text)"
+    }}
+  >
     <style>{responsiveStyle}</style>
-    <h1 className="blog-list-title" style={{
-      textAlign: "center",
-      fontWeight: 800,
-      fontSize: 34,
-      color: "#222",
-      marginBottom: 38
-    }}>
+    <h1
+      className="blog-list-title"
+      style={{
+        textAlign: "center",
+        fontWeight: 800,
+        fontSize: 34,
+        color: "var(--text)",
+        marginBottom: 38
+      }}
+    >
       Blogu Top Mobile
     </h1>
-    <div className="blog-list-grid" style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fit,minmax(330px,1fr))",
-      gap: 32,
-    }}>
-      {blogPosts.map(post => (
-        <div key={post.id} className="blog-list-card" style={{
-          background: "#fff",
-          border: "1px solid #f1f1f1",
-          boxShadow: "0 2px 12px #ff800008",
-          borderRadius: 16,
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-          minHeight: 390
-        }}>
-          <Link to={`/blog/${post.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+    <div
+      className="blog-list-grid"
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit,minmax(330px,1fr))",
+        gap: 32,
+      }}
+    >
+      {blogPosts.map((post) => (
+        <div
+          key={post.id}
+          className="blog-list-card"
+          style={{
+            background: "var(--card)",
+            border: "1px solid var(--stroke)",
+            boxShadow: "var(--shadow-lg)",
+            borderRadius: 16,
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            minHeight: 390,
+          }}
+        >
+          <Link
+            to={`/blog/${post.id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
             <img
               src={post.image}
               alt={post.title}
@@ -62,41 +79,70 @@ const BlogList = () => (
                 objectFit: "cover",
                 borderTopLeftRadius: 16,
                 borderTopRightRadius: 16,
-                borderBottom: "1px solid #f1f1f1"
+                borderBottom: "1px solid var(--stroke)",
               }}
             />
-            <div className="blog-list-card-content" style={{ padding: 22, flex: 1, display: "flex", flexDirection: "column" }}>
-              <span className="blog-list-date" style={{
-                color: "#ff8000",
-                fontWeight: 600,
-                fontSize: 13,
-                marginBottom: 10,
-                letterSpacing: 0.3
-              }}>{post.date}</span>
-              <h3 className="blog-list-post-title" style={{
-                fontSize: 22,
-                fontWeight: 700,
-                color: "#222",
-                margin: 0,
-                marginBottom: 13,
-                minHeight: 52
-              }}>{post.title}</h3>
-              <p className="blog-list-excerpt" style={{ color: "#444", fontSize: 16, flex: 1, marginBottom: 20 }}>
+            <div
+              className="blog-list-card-content"
+              style={{
+                padding: 22,
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <span
+                className="blog-list-date"
+                style={{
+                  color: "var(--accent)",
+                  fontWeight: 600,
+                  fontSize: 13,
+                  marginBottom: 10,
+                  letterSpacing: 0.3,
+                }}
+              >
+                {post.date}
+              </span>
+              <h3
+                className="blog-list-post-title"
+                style={{
+                  fontSize: 22,
+                  fontWeight: 700,
+                  color: "var(--text)",
+                  margin: 0,
+                  marginBottom: 13,
+                  minHeight: 52,
+                }}
+              >
+                {post.title}
+              </h3>
+              <p
+                className="blog-list-excerpt"
+                style={{
+                  color: "var(--muted)",
+                  fontSize: 16,
+                  flex: 1,
+                  marginBottom: 20,
+                }}
+              >
                 {post.excerpt}
               </p>
-              <span className="blog-list-btn" style={{
-                display: "inline-block",
-                marginTop: "auto",
-                padding: "8px 22px",
-                background: "#ff8000",
-                color: "#fff",
-                borderRadius: 8,
-                fontWeight: 600,
-                fontSize: 15,
-                boxShadow: "0 1px 5px #ff800017",
-                letterSpacing: 0.5,
-                transition: "background 0.14s"
-              }}>
+              <span
+                className="blog-list-btn"
+                style={{
+                  display: "inline-block",
+                  marginTop: "auto",
+                  padding: "8px 22px",
+                  background: "var(--accent)",
+                  color: "#fff",
+                  borderRadius: 8,
+                  fontWeight: 600,
+                  fontSize: 15,
+                  boxShadow: "0 1px 5px rgba(0,0,0,.5)",
+                  letterSpacing: 0.5,
+                  transition: "background 0.14s",
+                }}
+              >
                 Lexo më shumë
               </span>
             </div>
@@ -104,7 +150,7 @@ const BlogList = () => (
         </div>
       ))}
     </div>
-    <BlogSubscribe/>
+    <BlogSubscribe />
   </div>
 );
 

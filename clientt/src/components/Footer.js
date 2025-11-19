@@ -1,56 +1,126 @@
 import React from "react";
-import { Box, Container, Grid, Typography, IconButton, Stack, Divider } from "@mui/material";
+import "./Footer.css";
+import "../pages/Legal.css"; // reuse legal typography/link styles
 import { FaFacebook, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa";
 import { SiVisa, SiMastercard, SiApplepay, SiGooglepay } from "react-icons/si";
+import { Link } from "react-router-dom";
 
-const Footer = () => (
-  <Box sx={{ bgcolor: "#fff", borderTop: "1.5px solid #eee", mt: 7, pb: 1 }}>
-    <Container maxWidth="lg" sx={{ pt: 5 }}>
-      <Grid container spacing={4} justifyContent="space-between">
-        {/* Logo & Kontakt */}
-        <Grid item xs={12} sm={4} md={3}>
-          <Typography variant="h5" fontWeight="bold" color="#ff8000" sx={{ letterSpacing: 1, mb: 1 }}>
-            Top Mobile
-          </Typography>
-          <Typography fontSize={15} mb={1}>Ulpiane, Prishtinë</Typography>
-          <Typography fontSize={15} mb={1}>Tel: <a href="tel:+38344123456" style={{color:'#ff8000'}}>045 407 222 | 044 723 123</a></Typography>
-          <Typography fontSize={15}>Email: <a href="mailto:topmobileshopservice@gmail.com" style={{color:'#ff8000'}}>topmobileshopservice@gmail.com</a></Typography>
-        </Grid>
-        {/* Menu */}
-        <Grid item xs={12} sm={4} md={3}>
-          <Typography fontWeight={600} mb={1} color="#50577a">Meny</Typography>
-          <Stack spacing={1}>
-            <a href="/products" style={{ color: "#50577a", textDecoration: "none" }}>Produktet</a>
-            <a href="/cart" style={{ color: "#50577a", textDecoration: "none" }}>Shporta</a>
-            <a href="/contact" style={{ color: "#50577a", textDecoration: "none" }}>Na Kontakto</a>
-            <a href="/about" style={{ color: "#50577a", textDecoration: "none" }}>Rreth Nesh</a>
-          </Stack>
-        </Grid>
-        {/* Social & Pagesat */}
-        <Grid item xs={12} sm={4} md={4}>
-          <Typography fontWeight={600} mb={1} color="#50577a">Na ndiqni</Typography>
-          <Stack direction="row" spacing={2} mb={2}>
-            <IconButton href="https://facebook.com" target="_blank" sx={{ color: "#4267B2" }}><FaFacebook /></IconButton>
-            <IconButton href="https://www.instagram.com/topmobile.rks/" target="_blank" sx={{ color: "#C13584" }}><FaInstagram /></IconButton>
-            <IconButton href="https://tiktok.com" target="_blank" sx={{ color: "#000" }}><FaTiktok /></IconButton>
-            <IconButton href="https://wa.me/38344723123" target="_blank" sx={{ color: "#25D366" }}><FaWhatsapp /></IconButton>
-          </Stack>
-          <Divider sx={{ mb: 1 }} />
-          <Typography fontWeight={600} mb={1} color="#50577a">Pagesat</Typography>
-          <Stack direction="row" spacing={2}>
-            <SiVisa size={30} color="#0053A0" />
-            <SiMastercard size={30} color="#EB001B" />
-            <SiApplepay size={30} color="#333" />
-            <SiGooglepay size={30} color="#1a73e8" />
-          </Stack>
-        </Grid>
-      </Grid>
-      <Divider sx={{ my: 4 }} />
-      <Typography textAlign="center" fontSize={15} color="#888">
-        © {new Date().getFullYear()} Top Mobile. Të gjitha të drejtat e rezervuara.
-      </Typography>
-    </Container>
-  </Box>
-);
+const Footer = () => {
+  // Structured Data (Local SEO)
+  const storeJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ElectronicsStore",
+    "name": "Top Mobile",
+    "url": "https://topmobile.store/",
+    "image": "https://topmobile.store/og-image.jpg",
+    "telephone": "+38345407222",
+    "email": "topmobileshopservice@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Ulpiane",
+      "addressLocality": "Prishtinë",
+      "addressCountry": "XK"
+    },
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], "opens": "09:00", "closes": "21:00" }
+    ],
+    "paymentAccepted": ["Cash","Visa","Mastercard","Apple Pay","Google Pay"],
+    "areaServed": "Kosovo",
+    "sameAs": [
+      "https://www.facebook.com/topmobile.rks",
+      "https://www.instagram.com/topmobile.rks/",
+      "https://www.tiktok.com/@topmobile.rks"
+    ]
+  };
+
+  return (
+    <>
+      <script type="application/ld+json">{JSON.stringify(storeJsonLd)}</script>
+
+      <footer className="footer" role="contentinfo">
+        <div className="footer-glow" aria-hidden="true" />
+        <div className="footer-main">
+          {/* Logo & Kontakt */}
+          <div className="footer-logo-contact">
+            <div className="footer-logo">Top Mobile</div>
+            <div className="footer-contact">
+              <div>Adresa: Ulpiane, Prishtinë</div>
+              <div>
+                Tel:{" "}
+                <a href="tel:+38345407222" aria-label="Telefono 048 723 720">048 723 720</a>
+              </div>
+              <div>
+                Email:{" "}
+                <a href="mailto:info@topmobile.store">
+                 info@topmobile.store
+                </a>
+              </div>
+              <div>Orari: 09:00–21:00 (Hënë–Shtunë)</div>
+              <div>E diel: Mbyllur</div>
+            </div>
+          </div>
+
+          {/* Linke Meny */}
+          <div className="footer-links">
+            <h4>Meny & Shërbime</h4>
+            <ul>
+              <li><Link to="/products">Produktet</Link></li>
+              <li><Link to="/cart">Shporta</Link></li>
+              <li><Link to="/sherbimet/servisi">Riparime & Bartje të Dhënave</Link></li>
+              <li><Link to="/products/accessories">Aksesorë</Link></li>
+              <li><Link to="/gift-cards">Gift Cards</Link></li>
+              <li>
+                <a href="https://wa.me/38348723720" target="_blank" rel="noopener noreferrer">
+                  Na Kontakto në WhatsApp
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social & Pagesat */}
+          <div className="footer-links">
+            <h4>Na ndiqni</h4>
+            <div className="footer-social" aria-label="Rrjetet sociale">
+              <a href="https://www.facebook.com/topmobile.rks" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <FaFacebook />
+              </a>
+              <a href="https://www.instagram.com/topmobile.rks/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <FaInstagram />
+              </a>
+              <a href="https://www.tiktok.com/@topmobile.rks" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                <FaTiktok />
+              </a>
+              <a href="https://wa.me/38344723123" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                <FaWhatsapp />
+              </a>
+            </div>
+
+            <h4>Pagesat e pranuara</h4>
+            <div className="footer-payments" aria-label="Metodat e pagesës">
+              <span className="pay-chip"><SiVisa size={22} title="Visa" /></span>
+              <span className="pay-chip"><SiMastercard size={22} title="Mastercard" /></span>
+              <span className="pay-chip"><SiApplepay size={22} title="Apple Pay" /></span>
+              <span className="pay-chip"><SiGooglepay size={22} title="Google Pay" /></span>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="footer-bottom">
+          <div className="footer-bottom-inner">
+            <div className="footer-copyright">
+              © {new Date().getFullYear()} Top Mobile. Të gjitha të drejtat e rezervuara.
+            </div>
+            <div className="footer-bottom-links">
+              <Link to="/privacy" className="legal-link">Privatësia</Link>
+              <Link to="/terms" className="legal-link">Kushtet</Link>
+              <Link to="/warranties" className="legal-link">Garancia</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </>
+  );
+};
 
 export default Footer;

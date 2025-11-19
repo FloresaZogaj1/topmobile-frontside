@@ -1,13 +1,21 @@
+// src/components/ProductCard.jsx
 import React from "react";
 import "./ProductCard.css";
 
 const ProductCard = ({ product }) => (
   <div className="product-card">
-    <img src={product.imageUrl || "https://via.placeholder.com/200x150"} alt={product.name} className="product-image" />
-    <h3>{product.name}</h3>
-    <p>{product.description}</p>
-    <b style={{ color: "#009688" }}>Çmimi: {product.price} €</b>
-    {/* <button>Shiko Detajet</button> */}
+    <div className="image-wrapper">
+      <img
+        src={product.imageUrl || "https://via.placeholder.com/260x180"}
+        alt={product.name}
+        className="product-image"
+        loading="lazy"
+      />
+    </div>
+    <h3 className="product-title">{product.name}</h3>
+    <p className="product-desc">{product.description}</p>
+    <div className="product-price">€{Number(product.price).toFixed(2)}</div>
+    {/* <button className="product-btn">Shiko Detajet</button> */}
   </div>
 );
 

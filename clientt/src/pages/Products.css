@@ -1,136 +1,296 @@
-.products-page {
-  max-width: 1240px;
-  margin: 40px auto;
-  padding: 0 16px;
+:root{
+  /* Paleta e errët si në screenshot */
+  --page:#0b0c10;
+  --card:#0f1115;
+  --stroke:#1a1f29;
+  --text:#e9edf6;
+  --muted:#9aa3b2;
+  --accent:#ff7a00;
+  --accent-weak:#ffa24a;
 }
 
-.products-page h2 {
-  margin-bottom: 30px;
-  color: #25243c;
+/* ===== Shell ===== */
+.products-page{
+  max-width:1240px;
+  margin:40px auto;
+  padding:0 16px 48px;
+}
+.products-page--dark{ background:var(--page); }
+.products-loading{
+  text-align:center;
+  padding:40px;
+  color:var(--muted);
+}
+
+/* ===== Heading ===== */
+.products-heading{
+  margin: 12px 0 26px 0;
+  color: var(--text);
   font-weight: 800;
-  font-size: 2rem;
-  text-align: left;
-  letter-spacing: 0.5px;
+  font-size: clamp(22px, 4.8vw, 28px);
+  letter-spacing: .2px;
 }
 
-.products-bar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 14px;
-  margin-bottom: 32px;
+/* ===== Grid ===== */
+.products-list{
+  display:grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap:24px;
 }
+@media (min-width:600px){ .products-list{ grid-template-columns: repeat(2, 1fr); } }
+@media (min-width:900px){ .products-list{ grid-template-columns: repeat(4, 1fr); } }
 
-.products-bar input,
-.products-bar select {
-  padding: 10px 15px;
-  border-radius: 8px;
-  border: 1.5px solid #e7e7ef;
-  min-width: 200px;
-  font-size: 17px;
-  background: #f8f9fd;
-}
-
-.products-list {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 32px;
-}
-
-@media (min-width: 600px) {
-  .products-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 900px) {
-  .products-list {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.product-card {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 4px 24px #0001;
-  border: none;
-  padding: 22px 18px 18px 18px;
-  text-align: left;
+/* ===== Card ===== */
+.product-card{
   position: relative;
-  min-height: 360px;
+  background: var(--card);
+  border-radius: 18px;
+  border: 1px solid var(--stroke);
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+  padding: 0;
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.15s, transform 0.15s;
-  justify-content: flex-start;
+  min-height: 420px;
+  transition: transform .18s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.product-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.45);
+  border-color: #232a35;
 }
 
-.product-card:hover {
-  transform: translateY(-5px) scale(1.025);
-  box-shadow: 0 8px 28px #ff800025, 0 1.5px 10px #0001;
-  border: 1.5px solid #ff8000;
+/* badge */
+.product-discount-badge{
+  position:absolute;
+  top: 14px;
+  left: 14px;
+  background: var(--accent);
+  color:#0b0b0f;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: .3px;
+  box-shadow: 0 2px 10px rgba(255,122,0,.25);
+  z-index: 2;
 }
 
-.product-card img {
-  width: 92%;
-  max-height: 135px;
-  object-fit: contain;
-  margin: 0 auto 14px auto;
-  display: block;
+/* ===== Image zone – sfond i zi me glow ===== */
+.product-image-link{ display:block; text-decoration:none; }
+.product-image-wrap{
+  min-height: 220px;
+  padding: 22px 22px 18px;
+  display:flex; align-items:center; justify-content:center;
+  background:
+    radial-gradient(70% 60% at 50% 60%, rgba(255,122,0,.10) 0%, rgba(10,10,13,0) 60%),
+    #0a0a0d;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  border-bottom: 1px solid var(--stroke);
+}
+.product-image-wrap img{
+  width:100%;
+  max-height:180px;
+  object-fit:contain;
+  display:block;
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,.35));
   border-radius: 10px;
-  background: #f9fafe;
-  box-shadow: 0 2px 10px #00000011;
 }
 
-.product-info h3 {
-  margin: 6px 0 8px 0;
-  font-size: 16px;
-  font-weight: 700;
-  color: #232e42;
-  min-height: 36px;
+/* ===== Info ===== */
+.product-info{
+  text-align:left;
+  padding: 14px 16px 0 16px;
 }
-
-.product-info .product-description {
-  font-size: 13.5px;
-  color: #8889ad;
-  min-height: 28px;
-  margin-bottom: 10px;
-}
-
-.product-price {
-  display: block;
-  margin-top: 8px;
-  font-weight: bold;
-  color: #ff8000;
+.product-title-link{ text-decoration:none; }
+.product-title{
+  margin: 6px 0 6px 0;
   font-size: 18px;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1.15;
+  min-height: 24px;
 }
-
-.product-old-price {
-  color: #b0b0b0;
+.product-description{
   font-size: 14px;
-  text-decoration: line-through;
-  margin-right: 11px;
+  color: var(--muted);
+  min-height: 21px;
+  margin: 0 0 10px 0;
+}
+.product-price-row{ margin: 4px 0 12px 0; }
+.product-old-price{
+  color:#7a7f89;
+  font-size:14px;
+  text-decoration:line-through;
+  margin-right:8px;
+}
+.product-price{
+  color: var(--accent);
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: .2px;
 }
 
-.product-discount-badge {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  background: #ff8000;
-  color: #fff;
-  padding: 3px 14px;
-  border-radius: 7px;
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 10px #ff800033;
+/* ===== CTA – pilule portokalli ===== */
+.product-add{
+  background: var(--accent);
+  color: #0b0b0f;
+  padding: 12px 16px;
+  width: calc(100% - 32px);
+  margin: 14px 16px 16px 16px;
+  border: none;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  cursor:pointer;
+  transition: background .15s ease, transform .08s ease;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+.product-add:hover{ background: var(--accent-weak); }
+.product-add:active{ transform: translateY(1px); }
+.product-cart-icon{ font-size: 20px; }
+.product-add-label{ line-height: 1; }
+
+/* ===== Mobile polish ===== */
+@media (max-width:420px){
+  .product-title{ min-height: unset; }
 }
 
-.no-products {
-  text-align: center;
-  width: 100%;
-  color: #b2b2b2;
-  padding: 60px 0;
-  font-size: 20px;
-  letter-spacing: 0.5px;
-  font-weight: 600;
+/* Touch devices: hiq hover të theksuar */
+@media (hover: none){
+  .product-card:hover{ transform:none; box-shadow:0 8px 24px rgba(0,0,0,.35); }
 }
+/* ==== FIX PATCH – forco rrjetin, dimensionet dhe butonin ==== */
+
+/* siguro grid-in edhe nëse ka CSS globale që e prish */
+.products-page .products-list{
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+  gap: 24px !important;
+}
+
+/* karta të mos zgjerohen jashtë kolonës */
+.products-page .product-card{
+  width: 100% !important;
+  max-width: none !important;
+  overflow: hidden;                /* mos lejo elementë të dalin jashtë */
+  border-radius: 18px !important;
+  border: 1px solid var(--stroke) !important;
+  background: var(--card) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35) !important;
+}
+
+/* zona e imazhit – lartësi fikse, raport i qëndrueshëm */
+.products-page .product-image-wrap{
+  padding: 22px !important;
+  background:
+    radial-gradient(70% 60% at 50% 60%, rgba(255,122,0,.10) 0%, rgba(10,10,13,0) 60%),
+    #0a0a0d !important;
+  aspect-ratio: 16/12;             /* lartësi konsistente */
+  border-bottom: 1px solid var(--stroke) !important;
+}
+.products-page .product-image-wrap img{
+  max-width: 100% !important;
+  max-height: 180px !important;
+  object-fit: contain !important;
+  display: block !important;
+  border-radius: 10px;
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,.35));
+}
+
+/* titulli/teksti brenda kartës */
+.products-page .product-info{
+  padding: 14px 16px 0 16px !important;
+  color: var(--text) !important;
+}
+
+/* çmimet – formatim i qëndrueshëm */
+.products-page .product-price{ color: var(--accent) !important; font-weight: 900 !important; }
+.products-page .product-old-price{ color:#7a7f89 !important; }
+
+/* BUTONI – shfuqizo stilet globale dhe vendos tonat */
+.products-page .product-add{
+  all: unset;                      /* heq çdo stil global të button/btn */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+
+  width: calc(100% - 32px) !important;
+  margin: 14px 16px 16px 16px !important;
+  padding: 12px 16px !important;
+
+  background: var(--accent) !important;
+  color: #0b0b0f !important;
+  border-radius: 999px !important;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+  text-transform: uppercase !important;
+  letter-spacing: .4px !important;
+  cursor: pointer !important;
+
+  position: static !important;     /* mos rri sticky/fixed nga global CSS */
+  box-shadow: none !important;
+  border: none !important;
+}
+.products-page .product-add:hover{ background: var(--accent-weak) !important; }
+.products-page .product-cart-icon{ font-size: 20px !important; }
+
+/* badge ulje – lëre si ishte, vetëm siguro ngjyra/pozicionin */
+.products-page .product-discount-badge{
+  position: absolute !important;
+  top: 14px !important;
+  left: 14px !important;
+  background: var(--accent) !important;
+  color:#0b0b0f !important;
+  padding: 4px 10px !important;
+  border-radius: 8px !important;
+  font-weight: 900 !important;
+  font-size: 13px !important;
+  z-index: 2 !important;
+}
+
+/* titulli “Produktet” si në preview */
+.products-page .products-heading{
+  margin: 12px 0 26px 0 !important;
+  color: var(--text) !important;
+  font-weight: 800 !important;
+  font-size: clamp(22px, 4.8vw, 28px) !important;
+}
+
+/* në telefona – polish */
+@media (max-width:420px){
+  .products-page .product-image-wrap{ aspect-ratio: 16/13; }
+  .products-page .product-image-wrap img{ max-height: 160px !important; }
+}
+/* Rreshtim dhe unifikim i butonave */
+.pd-actions{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+/* Siguro madhësi/forme identike për të dy butonat */
+.pd-actions .MuiButton-root{
+  border-radius:999px;
+  padding:10px 16px;
+  font-weight:900;
+  font-size:16px;
+  line-height:1.2;
+  box-shadow:none;
+  text-transform:none;
+}
+
+/* Butoni i WhatsApp (fallback i ngjyrave nga CSS nëse MUI sx nuk aplikohet) */
+.pd-wa-btn{ background:#25D366 !important; color:#0b0b0b !important; }
+.pd-wa-btn:hover{ background:#1ebe57 !important; }
+
+/* opsionale: mos lejo që .pd-add-btn ta limitojë gjatësinë */
+.pd-add-btn{ inline-size:max-content; }
